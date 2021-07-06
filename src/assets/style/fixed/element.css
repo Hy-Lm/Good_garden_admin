@@ -1,0 +1,34 @@
+.el-card.is-always-shadow {
+  box-shadow: 0 0 8px 0 rgba(232, 237, 250, 0.6), 0 2px 4px 0 rgba(232, 237, 250, 0.5);
+}
+
+.el-card.is-hover-shadow:hover {
+  box-shadow: 0 0 8px 0 rgba(232, 237, 250, 0.6), 0 2px 4px 0 rgba(232, 237, 250, 0.5);
+}
+
+.el-menu--horizontal {
+  border-bottom: none !important;
+}
+
+.el-tabs__item:focus.is-active.is-focus:not(:active) {
+  box-shadow: none !important;
+}
+
+.el-container.is-vertical {
+  box-sizing: border-box;
+  padding: 110px 20px 0px 20px;
+}
+
+.el-header {
+  padding: 0px !important;
+  height: 50px !important;
+  margin-top: 3px;
+}
+
+.el-main {
+  padding: 20px 0px !important;
+}
+
+.el-table td, .el-table th {
+  text-align: center !important;
+}
