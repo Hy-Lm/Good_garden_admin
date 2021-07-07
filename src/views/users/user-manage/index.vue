@@ -3,7 +3,7 @@
     <el-header>
       <el-input size="mini" v-model="user_phone" placeholder="用户/手机"></el-input>
       <el-button size="mini" style="width:89px" type="primary" icon="el-icon-search">查询</el-button>
-      <el-button size="mini" type="primary" icon="el-icon-edit" @click="newAdd">新增用户</el-button>
+      <el-button size="mini" type="primary" icon="el-icon-edit" @click="a">新增用户</el-button>
     </el-header>
     <el-main>
       <el-table size="mini" :data="tableData" fixed border style="width: 100%">
@@ -60,12 +60,13 @@
       :dialogFormVisible="dialogFormVisible"
       @close="close"
       @canclepwd="canclepwd"
-      @surepwd="surepwd"
     />
   </el-container>
 </template>
 <script>
 import mydialog from "./component/dialog";
+import { banners } from '@/api/request.js'
+// import {getClassifyTreeFn} from  "@/api/impl.goods.js";
 export default {
   data() {
     return {
@@ -109,7 +110,20 @@ export default {
       ],
     };
   },
+  // ?q=vue&sort=stars
+  mounted() {
+	 
+  	console.log(1)
+  },
   methods: {
+	  a(){
+		banners({
+		  q:"vue",
+		  sort:"stars"
+		}).then((res) => {
+		  console.log(res,"123")
+		})  
+	  },
     //添加新用户
     newAdd() {
       this.isWho = 1; //对应表单

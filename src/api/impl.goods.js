@@ -2,7 +2,7 @@ import request from '@/plugin/axios'
 
 // 获取分类tree
 export  const getClassifyTreeFn = (data) => {
-    return request({
+    return  request({
         url: '/category/findCategoryTreeFn',
         method: 'get',
         params: data

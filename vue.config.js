@@ -10,26 +10,27 @@ process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
 
 // 基础路径 注意发布之前要先修改这里
 let publicPath = '/'
-
+// 测试地址
+// https://api.github.com/search/repositories?q=vue&sort=stars
 module.exports = {
   publicPath, // 根据你的实际情况更改这里
   lintOnSave: false,//关掉eslint验证
   outputDir: 'xShop',
   devServer: {
     publicPath, // 和 publicPath 保持一致
-    // open: true,
-    // host: 'localhost',
-    // port: '8080',
-    // proxy:{
-    //   '/api': {
-    //     target: 'https://ishop.xweik.com', //对应自己的接口
-    //     changeOrigin: true,
-    //     ws: true,
-    //     pathRewrite: {
-    //       '^/api': ''
-    //     }
-    //   }
-    // }
+    open: true,
+    host: 'localhost',
+    port: '8080',
+    proxy:{
+      '/api': {
+        target: 'https://api.github.com', //对应自己的接口
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   },
   css: {
     loaderOptions: {
