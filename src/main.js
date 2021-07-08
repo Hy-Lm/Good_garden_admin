@@ -2,8 +2,8 @@
 import Vue from 'vue'
 import App from './App'
 // ant-design-vue组件
-// import Antd from 'ant-design-vue';
-// import 'ant-design-vue/dist/antd.css';
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 // import {message,inputNumber} from "ant-design-vue"
 
 // 核心插件
@@ -34,6 +34,7 @@ import 'quill/dist/quill.bubble.css'
 Vue.use(d2Admin)
 Vue.use(VueQuillEditor)
 Vue.use(vueBeauty)
+Vue.use(Antd);
 
 // 注册全局组件
 // 引入全局组件

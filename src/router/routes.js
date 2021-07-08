@@ -61,7 +61,16 @@ const frameIn = [
         },
         component: _import('users/menue-manage')
       },
-	  
+	  // home
+	  {
+	    path: '/home/homes',
+	    name: 'homes',
+	    meta: {
+	      title: 'home',
+	      auth: true
+	    },
+	    component: _import('home/homes')
+	  },
       // ******************************系统设置end
       // 页面重定向 必须保留
       {

@@ -11,6 +11,14 @@ export default [
             { path: '/users/menue-manage', title: '菜单管理' }
         ]
     },
+	{
+	    title: 'home',
+	    icon: 'folder-o',
+	    children: [
+	        { path: '/home/homes', title: 'homes' },
+	      
+	    ]
+	},
 	
     // {
     //     title: '工序管理',
