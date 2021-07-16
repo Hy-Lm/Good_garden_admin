@@ -105,12 +105,12 @@ export default {
         {
           //表格对应的数据
           date: "1",
-          name: "王小虎",
+          name: "王11小虎",
           address: "上海市普陀区金沙江路 1518 弄"
         },
         {
           date: "2",
-          name: "王小虎",
+          name: "王22小虎",
           address: "上海市普陀区金沙江路 1517 弄"
         }
       ]

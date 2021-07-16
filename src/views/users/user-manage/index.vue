@@ -83,7 +83,7 @@ export default {
         {
           //表格对应的数据
           date: "1",
-          username: "王小虎",
+          username: "王小虎111",
           unitname: "某某单位",
           account: "某某账号",
           phone: "11111111111",
@@ -96,7 +96,7 @@ export default {
         },
         {
           date: "2",
-          username: "王小虎",
+          username: "王小虎222",
           unitname: "某某单位",
           account: "某某账号",
           phone: "11111111111",

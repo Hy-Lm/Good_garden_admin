@@ -61,15 +61,75 @@ const frameIn = [
         },
         component: _import('users/menue-manage')
       },
-	  // home
+	  // 商品管理
 	  {
-	    path: '/home/homes',
-	    name: 'homes',
+	    path: '/commodity/commoditys',
+	    name: 'commoditys',
 	    meta: {
-	      title: 'home',
+	      title: '商品管理',
 	      auth: true
 	    },
-	    component: _import('home/homes')
+	    component: _import('commodity/commoditys')
+	  },
+	  // 预约管理
+	  {
+		  path: '/make/makes',
+		  name: 'makes',
+		  meta: {
+		    title: '预约管理',
+		    auth: true
+		  },
+		  component: _import('make/makes')
+	  },
+	  // 用户管理
+	  {
+	  		  path: '/management/managements',
+	  		  name: 'managements',
+	  		  meta: {
+	  		    title: '用户管理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('management/managements')
+	  },
+	  // 订单处理
+	  {
+	  		  path: '/processing/processings',
+	  		  name: 'processings',
+	  		  meta: {
+	  		    title: '订单处理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('processing/processings')
+	  },
+	  // 退款管理
+	  {
+	  		  path: '/refund/refunds',
+	  		  name: 'refunds',
+	  		  meta: {
+	  		    title: '退款管理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('refund/refunds')
+	  },
+	  // 图片管理
+	  {
+	  		  path: '/picture/pictures',
+	  		  name: 'picture',
+	  		  meta: {
+	  		    title: '图片管理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('picture/pictures')
+	  },
+	  // 管理员列表
+	  {
+	  		  path: '/controller/controllers',
+	  		  name: 'controller',
+	  		  meta: {
+	  		    title: '管理员列表',
+	  		    auth: true
+	  		  },
+	  		  component: _import('controller/controllers')
 	  },
       // ******************************系统设置end
       // 页面重定向 必须保留
