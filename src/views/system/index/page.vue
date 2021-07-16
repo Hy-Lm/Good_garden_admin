@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class='page'>
 		<div class="d2-page-top">
 			<!-- 首页 -->
 			<div class="d2-page-top-t">
@@ -12,9 +12,11 @@
 						</div>
 					</div>
 				</div>
-				<div class="d2-page-top-r"></div>
+				<div class="d2-page-top-r">
+					<pageNews/>
+				</div>
 			</div>
-			<div class="d2-page-top-v"></div>
+			<div class="d2-page-top-b"></div>
 		</div>
 		<!-- <div class="d2-page-cover">
 			<div class="d2-page-cover__logo">
@@ -27,29 +29,60 @@
 	</div>
 
 </template>
-
+<script>
+import pageNews from './components/page-news.vue';
+  export default{
+    data(){
+      return{
+      }
+    },
+	methods:{
+		
+	},
+	components:{
+		pageNews
+	}
+}
+</script>
 <style lang="scss" scoped>
+	.page{
+		height: 100vh;
+		opacity: 1;
+		background: #dee5e7;
+	}
 	.d2-page-top{
 		height: 100vh;
 		opacity: 1;
 		background: #dee5e7;
+		display: flex;
+		flex-direction: column;
+		.d2-page-top-b{
+			flex: 1;
+			opacity: 1;
+			background: #ffffff;
+		}
 		.d2-page-top-t{
 			padding:17px 23px;
+			padding-left: 13px;
 			height: 352px;
 			display: flex;
 			justify-content: space-between;
+			box-sizing: border-box;
+			align-items: center;
 			.d2-page-top-r{
 				width: 656px;
-				height: 352px;
-				opacity: 0.45;
-				background: #ffffff;
+				height: 100%;
+				// background-color: #FFFFFF;
+				background:rgba(255,255,255,.5);
 				border-radius: 15px;
+				padding: 15px 17px 23px;
+				box-sizing: border-box;
 			}
 			.d2-page-top-l{
 				flex: 1;
 				display: flex;
 				margin-right: 8px;
-				justify-content: space-between;
+				justify-content: space-around;
 				.d2-page-top-l-item{
 					display: flex;
 					justify-content: center;
