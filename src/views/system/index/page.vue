@@ -4,21 +4,22 @@
 			<!-- 首页 -->
 			<div class="d2-page-top-t">
 				<div class="d2-page-top-l">
-					<div class="d2-page-top-l-item" v-for="(item,index) in 3" :key="index">
-						<div class="d2-page-top-l-item-con">用户数量</div>
+					<div class="d2-page-top-l-item" v-for="(item,index) in pageCons" :key="index">
+						<div class="d2-page-top-l-item-con">{{item.con1}}</div>
 						<div class="d2-page-top-l-item-img">
-							<img src="./components/d2-help-btn/image/qq.jpg" >
-							<span>38,985</span>
+							<img :src="item.img">
+							<!-- <img src="@/assets/cat.jpg" > -->
+							<span>{{item.num}}</span>
 						</div>
 					</div>
 				</div>
 				<div class="d2-page-top-r">
-					<pageNews/>
+					<pageNews />
 				</div>
 			</div>
 			<div class="d2-page-top-b">
 				<!-- 图表-->
-				<Exchart/>
+				<Exchart />
 			</div>
 		</div>
 		<!-- <div class="d2-page-cover">
@@ -33,67 +34,90 @@
 
 </template>
 <script>
-import pageNews from './components/page-news.vue';
-import Exchart from './components/exchart.vue';
-  export default{
-    data(){
-      return{
-      }
-    },
-	methods:{
-		
-	},
-	components:{
-		pageNews,
-		Exchart
+	import pageNews from './components/page-news.vue';
+	import Exchart from './components/exchart.vue';
+	export default {
+		data() {
+			return {
+				pageCons: [{
+						con1: '用户数量',
+						img: require('@/assets/cat.jpg'),
+						num: '38,985'
+					},
+					{
+						con1: '订单总量',
+						img: require('@/assets/cat.jpg'),
+						num: '21,554'
+					},
+					{
+						con1: '成交总额',
+						img: require('@/assets/cat.jpg'),
+						num: '151,321,541'
+					}
+				]
+			}
+		},
+		methods: {
+
+		},
+		components: {
+			pageNews,
+			Exchart
+		}
 	}
-}
 </script>
 <style lang="scss" scoped>
-	.page{
+	.page {
 		height: 100vh;
 		opacity: 1;
 		background: #dee5e7;
 	}
-	.d2-page-top{
+
+	.d2-page-top {
 		height: 100vh;
 		opacity: 1;
 		background: #dee5e7;
 		display: flex;
 		flex-direction: column;
-		.d2-page-top-b{
+
+		.d2-page-top-b {
 			flex: 1;
 			opacity: 1;
 			background: #ffffff;
 		}
-		.d2-page-top-t{
-			padding:17px 23px;
+
+		.d2-page-top-t {
+			padding: 17px 23px;
 			padding-left: 13px;
 			height: 352px;
 			display: flex;
 			justify-content: space-between;
 			box-sizing: border-box;
 			align-items: center;
-			.d2-page-top-r{
+
+			.d2-page-top-r {
 				width: 656px;
 				height: 100%;
 				// background-color: #FFFFFF;
-				background:rgba(255,255,255,.5);
+				background: rgba(255, 255, 255, .5);
 				border-radius: 15px;
 				padding: 15px 17px 23px;
 				box-sizing: border-box;
 			}
-			.d2-page-top-l{
+
+			.d2-page-top-l {
 				flex: 1;
 				display: flex;
 				margin-right: 8px;
 				justify-content: space-around;
-				.d2-page-top-l-item{
+
+				.d2-page-top-l-item {
 					display: flex;
 					justify-content: center;
 					align-items: center;
 					flex-direction: column;
-					.d2-page-top-l-item-con{
+
+					.d2-page-top-l-item-con {
 						height: 33px;
 						opacity: 1;
 						font-size: 24px;
@@ -101,38 +125,47 @@ import Exchart from './components/exchart.vue';
 						color: #ffffff;
 						margin-bottom: 8px;
 					}
-					.d2-page-top-l-item-img{
+
+					.d2-page-top-l-item-img {
 						display: flex;
 						align-items: center;
-						&>img{
+
+						&>img {
 							width: 46px;
 							height: 50px;
 							vertical-align: middle;
 							margin-right: 20px;
 						}
-						&>span{
+
+						&>span {
 							display: inline-block;
 							height: 50px;
+							line-height: 50px;
 							opacity: 1;
 							font-size: 36px;
 							color: #ffffff;
 						}
 					}
+
 					width: 282px;
 					height: 192px;
 					opacity: 1;
 					background: #f8ce3f;
 					border-radius: 18px;
-					&:nth-child(2){
+
+					&:nth-child(2) {
 						background: #11ccb0;
 					}
-					&:nth-child(3){
-						background:#2caead;;
+
+					&:nth-child(3) {
+						background: #2caead;
+						;
 					}
 				}
 			}
 		}
 	}
+
 	.d2-page-cover {
 		background: rgba(255, 255, 255, .1);
 		@extend %full;
