@@ -1,7 +1,10 @@
-预约管理		make
+预约管理		make          
 商品管理		commodity
 用户管理		management
 订单处理		processing
 退款管理		refund 
 图片管理		picture
 管理员列表	controller
+首页                          index 
+		      ---exchart.vue   图表
+		      ---page-news.vue   新闻

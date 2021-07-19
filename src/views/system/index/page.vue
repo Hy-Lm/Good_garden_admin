@@ -16,7 +16,10 @@
 					<pageNews/>
 				</div>
 			</div>
-			<div class="d2-page-top-b"></div>
+			<div class="d2-page-top-b">
+				<!-- 图表-->
+				<Exchart/>
+			</div>
 		</div>
 		<!-- <div class="d2-page-cover">
 			<div class="d2-page-cover__logo">
@@ -31,6 +34,7 @@
 </template>
 <script>
 import pageNews from './components/page-news.vue';
+import Exchart from './components/exchart.vue';
   export default{
     data(){
       return{
@@ -40,7 +44,8 @@ import pageNews from './components/page-news.vue';
 		
 	},
 	components:{
-		pageNews
+		pageNews,
+		Exchart
 	}
 }
 </script>

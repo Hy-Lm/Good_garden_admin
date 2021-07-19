@@ -44,6 +44,9 @@ import lineTree from "@/components/tree/line-tree"
 // 将表单验证注入到全局
 import validata from "@/assets/util/validator.js";
 Vue.prototype.$validata = validata
+// 图表注入全局
+import echarts from 'echarts'  //引入echarts
+Vue.prototype.$echarts = echarts  //挂载在全局
 
 Vue.component("mypopconfirm",mypopconfirm)
 Vue.component("lineTree",lineTree)
