@@ -1,7 +1,7 @@
 <template>
-	<div>
+	<view>
 		订单处理
-	</div>
+	</view>
 </template>
 
 <script>
