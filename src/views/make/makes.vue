@@ -40,8 +40,8 @@
 						</el-table-column>
 						<el-table-column fixed="right" label="操作" width="150">
 							<template slot-scope="scope">
-								<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
-								<el-button type="text" size="small">编辑</el-button>
+								<el-button @click="handleClick(scope.row)" type="text" size="small"  href="/#/cart">详情</el-button>
+								<!-- <el-button type="text" size="small">编辑</el-button> -->
 							</template>
 						</el-table-column>
 					</el-table>
@@ -130,6 +130,7 @@
 			},
 			handleClick(row) {
 				console.log(row);
+				this.$router.push()
 			},
 			// 分页--每页条数
 			handleSizeChange(val) {
