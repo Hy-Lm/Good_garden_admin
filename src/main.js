@@ -36,6 +36,7 @@ Vue.use(VueQuillEditor)
 Vue.use(vueBeauty)
 Vue.use(Antd);
 
+
 // 注册全局组件
 // 引入全局组件
 import mypopconfirm from "@/components/dialog/popconfirm"
