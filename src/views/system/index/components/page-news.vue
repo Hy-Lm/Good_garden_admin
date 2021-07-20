@@ -46,6 +46,10 @@
 </script>
 
 <style lang="scss">
+	.el-pagination .btn-next,.el-pagination button:disabled,.el-dialog, .el-pager li,.el-pagination .btn-prev{
+		background-color: transparent;
+		color:#000000;
+	}
 	.pageNews-f{
 		margin-top: 10px;
 		margin-left: 50%;
