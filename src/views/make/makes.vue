@@ -30,7 +30,7 @@
 						</el-table-column>
 						<el-table-column  prop="ordernumber" label="订单号" width="200">
 						</el-table-column>
-						<el-table-column prop="ordername" label="订单名称" width="250">
+						<el-table-column prop="ordername" label="订单名称" width="200">
 						</el-table-column>
 						<el-table-column prop="orderamount" label="订单金额(元)" width="150">
 						</el-table-column>
@@ -116,18 +116,7 @@
 			};
 		},
 		methods: {
-			toggleSelection(rows) {
-				if (rows) {
-					rows.forEach(row => {
-						this.$refs.multipleTable.toggleRowSelection(row);
-					});
-				} else {
-					this.$refs.multipleTable.clearSelection();
-				}
-			},
-			handleSelectionChange(val) {
-				this.multipleSelection = val;
-			},
+			// 详情
 			handleClick(row) {
 				console.log(row);
 				this.$router.push()
