@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<div class="home-title">当月订单统计</div>
+		<div class="home-title">订单统计</div>
 		<!-- 定义图表外层容器 -->
 		<div id="myHomeChart" ref="homeEcharts"></div>
 	</div>
@@ -32,79 +32,68 @@
 						fontSize: 18,
 					},
 					dataset: {
-						dimensions: ['product', '交易金额', '订单数量', '退款订单'],
+						dimensions: ['product', '交易金额', '订单数量'],
 						
 						source: [{
 								product: '1月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 2000,
+								'订单数量': 200,
 							},
 							{
 								product: '2月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 100,
+								'订单数量': 10,
 							},
 							{
 								product: '3月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 400,
+								'订单数量': 40,
 							},
 							{
 								product: '4月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 1000,
+								'订单数量': 100,
 							},
 							{
 								product: '5月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 1300,
+								'订单数量': 130,
 							},
 							{
 								product: '6月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 4100,
+								'订单数量': 410,
 							},
 							{
 								product: '7月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 2100,
+								'订单数量': 210,
 							},
 							{
 								product: '8月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 1300,
+								'订单数量': 130,
 							},
 							{
 								product: '9月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 1400,
+								'订单数量': 140,
 							},
 							{
 								product: '10月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 2300,
+								'订单数量': 230,
 							},
 							{
 								product: '11月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 2600,
+								'订单数量': 260,
+								
 							},
 							{
 								product: '12月',
-								'交易金额': 50,
-								'订单数量': 400,
-								'退款订单': 1600
+								'交易金额': 170,
+								'订单数量': 17,
 							}
 						]
 					},
@@ -117,19 +106,21 @@
 					series: [{
 							type: 'bar',
 							 barWidth: 15, //柱子的宽度
+							 color:"#FF8800"
 						},
+						
 						{
 							type: 'bar',
 							 barWidth: 15, //柱子的宽度
-						},
-						{
-							type: 'bar',
-							 barWidth: 15, //柱子的宽度
+							 color:"#11CCB0"
 						}
 					]
 				};
 
 				option && myChart.setOption(option);
+				window.onresize = function () {
+				  myChart.resize(); //使第一个图表适应
+				}
 			}
 			// 销毁实例(看项目需要进行销毁实例)
 			// destroyChart() {
@@ -142,26 +133,26 @@
 	.home {
 		width: 100%;
 		height: 100%;
-		padding: 23px 0 0 24px;
+		/* padding: 23px 0 0 24px; */
 	}
-
 	.home-title {
 		height: 33px;
 		opacity: 1;
-		font-size: 24px;
+		font-size: 20px;
 		font-family: PingFang SC, PingFang SC-Regular;
-		font-weight: 400;
+		font-weight: 700;
 		text-align: left;
 		color: #161616;
+		margin-left: 20px;
+		margin-top: 15px;
 	}
 
 	/* 给图表容器定义宽高 */
 	#myHomeChart {
 		margin: 0 auto;
 		width: 100%;
-		/* padding: 0 100px; */
+		margin-top: 10px;
 		box-sizing: border-box;
-		height: 500px;
-		margin-top: 50px;
+		height: calc(100% - 40px);
 	}
 </style>

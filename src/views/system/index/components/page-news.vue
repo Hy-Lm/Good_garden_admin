@@ -1,29 +1,20 @@
 <template>
 	<div class="pageNews">
-		<!-- 重要通知 -->
-		<div class="pageNews-top">
-			<img src="./d2-help-btn/image/we.jpg" alt="">
-			<span>重要通知:</span>
+		<div class="pageNewsBox">
+			<a-icon type="bell" /> <div style="margin-left: 5px;">重要通知</div>
 		</div>
-		<!-- 新闻内容 -->
-		<div class="pageNews-items">
-			<div class="pageNews-item" v-for="(item,index) in 5" :key="index">
-				<div>活动</div>
-				<div>新闻内容</div>
-				<div>6/23</div>
+		<div class="pageBody">
+			<div class="pageBodyBox" v-for="item in 10">
+				<div>
+					益园养车益园养车益园养车益园养车益园养车
+				</div>
+				<div style="margin-right: 10px;">
+					2021/6/1
+				</div>
 			</div>
 		</div>
-		<div class="pageNews-f">
-				<el-pagination
-				  @current-change="handleCurrentChange"
-				:page-size="pagesize"
-				:current-page="currpage"
-				
-			   layout="prev, pager, next"
-			  :total="totals">
-			</el-pagination>
-		</div>
-		
+		<!-- total 总条数 -->
+		<a-pagination size="small" :total="80" @change="onChange"  />
 	</div>
 </template>
 
@@ -31,68 +22,66 @@
   export default{
     data(){
       return{
-		  pagesize:5,//一页几个数据
-		  currpage:1,//默认第几页
-		  totals:50, //共有几条数据
+		 
       }
     },
 	methods:{
-			handleCurrentChange(val) {
-			  console.log(`当前页: ${val}`);
-			  this.currpage=val
-			}
+		onChange(e){
+			console.log(e)
+		}
 	}
 }
 </script>
 
 <style lang="scss">
-	.el-pagination .btn-next,.el-pagination button:disabled,.el-dialog, .el-pager li,.el-pagination .btn-prev{
-		background-color: transparent;
-		color:#000000;
-	}
-	.pageNews-f{
-		margin-top: 10px;
-		margin-left: 50%;
-		transform: translateX(-50%);
+	#components-pagination-demo-mini .ant-pagination:not(:last-child) {
+	  margin-bottom: 24px;
 	}
 	.pageNews{
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		width: 100%;
+		height: 90%;
+		background: #fff;
+		margin-top: 2%;
+		padding: 0 10px;
+		border-radius: 10px;
 	}
-	.pageNews-items{
-		.pageNews-item{
-			&:nth-child(1){
-				color: #11ccb0;
-			}
-			margin-top: 12px;
-			display: flex;
-			justify-content: space-between;
-			height: 28px;
-			opacity: 1;
-			font-size: 20px;
-			color: #000000;
-		}
-	}
-	.pageNews-top{
+	.pageNewsBox{
+		width: 100%;
+		font-size: 20px;
+		font-weight: 700;
 		display: flex;
-		align-items: center;
-		padding-bottom: 14px;
+		align-items:center;
+		padding: 13px 0;
 		border-bottom: 1px solid #707070;
-		&>img{
-			width: 22px;
-			height: 24px;
-			vertical-align: middle;
-			margin-right: 10px;
-		}
-		&>span{
-			display: inline-block;
-			height: 33px;
-			opacity: 1;
-			font-size: 24px;
-			text-align: left;
-			color: #000000;
-		}
+		
+	}
+	.pageBodyBox{
+		display: flex;
+		justify-content:space-between;
+		height: 30px;
+		line-height: 30px;
+	}
+	.pageBodyBox:hover{
+		color:#1890ff;
+		cursor: pointer;
+	}
+	.pageBody{
+		width: 100%;
+		height: calc(100% - 80px);
+		overflow: hidden;
+		overflow: auto;
+	}
+	.pageBody::-webkit-scrollbar{
+		width: 2px;
+		background: #eee;
+	}
+	.pageBody::-webkit-scrollbar-thumb{
+		background: #ccc;
+	}
+	.ant-pagination-jump-prev:after, .ant-pagination-jump-next:after,
+	.ant-pagination-next .ant-pagination-item-link:after,
+	.ant-pagination-prev .ant-pagination-item-link:after,
+	.anticon:before{
+		display: none!important;
 	}
 </style>
