@@ -17,7 +17,7 @@
 							<span class="demonstration">下单时间</span>
 							<el-date-picker v-model="value" type="daterange" align="right" unlink-panels
 								range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-								:picker-options="pickerOptions2">
+								:picker-options="pickerOptions2"  style="height: 25px; padding: 0 10px;vertical-align: middle;">
 							</el-date-picker>
 							<button>查询</button>
 						</div>
@@ -25,7 +25,7 @@
 				</div>
 				<!-- 表格 -->
 				<div class="makes-content-table">
-					<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" border style="width: 100%" :header-cell-style="{'background-color': '#D2D2D2' }"> 
+					<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" border style="width: 100%" :header-cell-style="{'background-color': '' }"> 
 						<el-table-column fixed type="selection" width="55" label="全选">
 						</el-table-column>
 						<el-table-column  prop="ordernumber" label="订单号" width="200">
@@ -40,7 +40,7 @@
 						</el-table-column>
 						<el-table-column fixed="right" label="操作" width="150">
 							<template slot-scope="scope">
-								<el-button @click="handleClick(scope.row)" type="text" size="small"  href="/#/cart">详情</el-button>
+								<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
 								<!-- <el-button type="text" size="small">编辑</el-button> -->
 							</template>
 						</el-table-column>
@@ -146,6 +146,12 @@
 	};
 </script>
 
+<style>
+  .el-date-editor .el-range-separator,
+  .el-date-editor .el-range__icon{
+  		line-height: 25px!important;
+  }
+</style>
 <style scoped lang="scss">
 	.makes-box {
 		height: 100vh;
@@ -193,17 +199,9 @@
 					float: left;
 
 					.block {
-						height: 25px;
-						line-height: 25px;
-
-						span {
-							margin-bottom: 6px;
-						}
-
 						.el-range-editor.el-input__inner {
 							justify-content: space-between;
 						}
-
 						.demonstration {
 							width: 72px;
 							height: 25px;
@@ -211,30 +209,32 @@
 							font-size: 18px;
 							color: #363636;
 							margin-right: 17px;
+							vertical-align: middle;
 						}
 					}
-
 					button {
 						width: 48px;
 						height: 25px;
-						line-height: 25px;
-						font-size: 18px;
 						background: #ffffff;
 						border-radius: 3px;
 						border: none;
 						margin-left: 25px;
+						vertical-align: middle;
 					}
 				}
 			}
 			.makes-content-pages{
 				text-align: right;
-				padding: 60px 0;
+				padding: 30px 0;
 				
 			}
 			.el-table--border, .el-table--group{
 				border: none;
 			}
-			
+			.el-pagination button{
+				background-color: #DEE5E7;
+			}
 		}
 	}
 </style>
+
