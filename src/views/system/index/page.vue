@@ -25,36 +25,12 @@
 			</a-layout-content>
 			<a-layout-footer>
 				<div class="d2-page-cover">
-					<div class="d2-page-cover__logo">
-						<slot />
-					</div>
-					<p class="d2-page-cover__build-time">北京辉达时代网络技术有限公司</p>
-					<p class="d2-page-cover__build-time">http://www.huidait.cn</p>
-					<slot name="footer" />
+					<p class="page-login--content-footer-copyright" style="line-height: 30px;">
+					  Copyright <d2-icon name="copyright"/><a href="http://www.huidait.cn" style="color:#000"> 北京辉达时代网络技术有限公司 </a>
+					</p>
 				</div>
 			</a-layout-footer>
 		</a-layout>
-		<!-- <div class="d2-page-top">
-			<div class="d2-page-top-t">
-				<div class="d2-page-top-l">
-					<div class="d2-page-top-l-item" v-for="(item,index) in pageCons" :key="index">
-						<div class="d2-page-top-l-item-con">{{item.con1}}</div>
-						<div class="d2-page-top-l-item-img">
-							<img :src="item.img">
-							<span>{{item.num}}</span>
-						</div>
-					</div>
-				</div>
-				<div class="d2-page-top-r">
-					<pageNews />
-				</div>
-			</div>
-			<div class="d2-page-top-b">
-				<Exchart />
-			</div>
-		</div> -->
-
-		
 	</div>
 
 </template>
@@ -83,7 +59,6 @@
 			}
 		},
 		methods: {
-
 		},
 		components: {
 			pageNews,

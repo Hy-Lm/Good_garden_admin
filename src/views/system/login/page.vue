@@ -50,8 +50,8 @@
             <a href="#">隐私</a>
             <a href="#">条款</a>
           </p> -->
-          <p class="page-login--content-footer-copyright">
-            Copyright <d2-icon name="copyright"/> 2018 D2 Projects 北京辉达时代网络技术有限公司 <a href="http://www.huidait.cn">@FairyEver</a>
+          <p class="page-login--content-footer-copyright" style="line-height: 30px;">
+            Copyright <d2-icon name="copyright"/><a href="http://www.huidait.cn" style="color:#000"> 北京辉达时代网络技术有限公司 </a>
           </p>
         </div>
       </div>
