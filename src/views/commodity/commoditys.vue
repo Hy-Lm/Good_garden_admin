@@ -54,13 +54,13 @@
 					</template>
 				</el-table-column>
 			</el-table>
-		</div>
-		<!-- 分页 -->
-		<div class="makes-content-pages">
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-				:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
-				:total="tableData.length">
-			</el-pagination>
+			<!-- 分页 -->
+			<div class="makes-content-pages">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
+					:total="tableData.length">
+				</el-pagination>
+			</div>
 		</div>
 	</div>
 </template>
@@ -184,7 +184,6 @@
 
 	.commoditys-box-h {
 		padding: 40px 50px 40px 25px;
-
 		.commoditys-box-h-l {
 			float: left;
 			height: 25px;
@@ -275,6 +274,11 @@
 				margin-left: 25px;
 			}
 		}
+	}
+	// 表格
+	.makes-content-table{
+		padding-left: 25px;
+		padding-right: 50px;
 	}
 	// 分页
 	.makes-content-pages {
