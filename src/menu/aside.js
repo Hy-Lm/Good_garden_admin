@@ -25,7 +25,8 @@ export default [
 	    title: '商品管理',
 	    icon: 'folder-o',
 	    children: [
-	        { path: '/commodity/commoditys', title: '商品管理' },
+	        { path: '/commodity/goodsShelves', title: '货架商品管理' },
+			{ path: '/commodity/IntegralGoods', title: '积分商品管理' },
 	      
 	    ]
 	},

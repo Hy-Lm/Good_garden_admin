@@ -1,6 +1,6 @@
 <template>
 	<div>
-		商品管理
+		详情，编辑，添加页面
 	</div>
 </template>
 

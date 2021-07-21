@@ -63,13 +63,31 @@ const frameIn = [
       },
 	  // 商品管理
 	  {
-	    path: '/commodity/commoditys',
-	    name: 'commoditys',
+	    path: '/commodity/goodsShelves',
+	    name: 'goodsShelves',
 	    meta: {
-	      title: '商品管理',
+	      title: '货架商品管理',
 	      auth: true
 	    },
-	    component: _import('commodity/commoditys')
+	    component: _import('commodity/goodsShelves')
+	  },
+	  {
+	    path: '/commodity/IntegralGoods',
+	    name: 'IntegralGoods',
+	    meta: {
+	      title: '积分商品管理',
+	      auth: true
+	    },
+	    component: _import('commodity/IntegralGoods')
+	  },
+	  {
+	    path: '/commodity/operation',
+	    name: 'operation',
+	    meta: {
+	      title: '操作',
+	      auth: true
+	    },
+	    component: _import('commodity/operation')
 	  },
 	  // 预约管理
 	  {
