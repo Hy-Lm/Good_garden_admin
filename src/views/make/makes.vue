@@ -1,4 +1,5 @@
 <template>
+
 	<div id="makeBox">
 		<div class="makeTop">
 			<div class="makeTopBox">
@@ -47,11 +48,12 @@
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
 					:current-page="currentPage4" :page-size="10" layout="total, prev, pager, next, jumper" :total="400">
 				</el-pagination>
+
+
 			</div>
 		</div>
 		<!-- 模态框 -->
-		<el-dialog :title="'订单编号：'+dialogItem[0].order" :visible.sync="centerDialogVisible" width="45%"
-			>
+		<el-dialog :title="'订单编号：'+dialogItem[0].order" :visible.sync="centerDialogVisible" width="45%">
 			<div style="width: 100%;">
 				<div style="font-weight: 700; font-size: 20px; margin-bottom: 10px;">客户信息:</div>
 				<el-table :data="dialogItem" size="mini">
@@ -65,11 +67,16 @@
 				<div style="font-weight: 700; font-size: 20px; margin: 10px; 0">订单信息:</div>
 				<el-table :data="dialogItem" size="mini">
 					<el-table-column property="formName" label="服务名称" width="95"></el-table-column>
-					<el-table-column  label="状态" width="95">
+					<el-table-column label="状态" width="95">
 						<template slot-scope="scope">
-							<span style="color:#f00; padding: 2px 4px; border-radius: 2px; border: 1px solid #f00;" v-if="scope.row.condition=='已完成'">{{scope.row.condition}}</span>
-							<span style="color:#2F9E45; padding: 2px 4px; border-radius: 2px; border: 1px solid #2F9E45;" v-if="scope.row.condition=='未完成'">{{scope.row.condition}}</span>
-							<span style="color:#FF8800; padding: 2px 4px; border-radius: 2px; border: 1px solid #FF8800;" v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span>
+							<span style="color:#f00; padding: 2px 4px; border-radius: 2px; border: 1px solid #f00;"
+								v-if="scope.row.condition=='已完成'">{{scope.row.condition}}</span>
+							<span
+								style="color:#2F9E45; padding: 2px 4px; border-radius: 2px; border: 1px solid #2F9E45;"
+								v-if="scope.row.condition=='未完成'">{{scope.row.condition}}</span>
+							<span
+								style="color:#FF8800; padding: 2px 4px; border-radius: 2px; border: 1px solid #FF8800;"
+								v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column property="cost" label="订单价格(￥)" width="95"></el-table-column>
@@ -78,7 +85,7 @@
 						<template slot-scope="scope">
 							<span style="color:#f00; ">{{scope.row.orderMoney}}</span>
 						</template>
-						
+
 					</el-table-column>
 					<el-table-column property="serviceItem" label="服务项目"></el-table-column>
 				</el-table>
@@ -86,7 +93,7 @@
 			<div class="diaBox">
 				下单时间：{{dialogItem[0].orderData}} / 到店完成时间：{{ dialogItem[0].perform }}
 			</div>
-	
+
 
 
 			<span slot="footer" class="dialog-footer">
@@ -111,7 +118,7 @@
 						code: "002"
 					}
 				],
-				dialogItem: [{}],//点击详情时看到的数据
+				dialogItem: [{}], //点击详情时看到的数据
 				selectItem: '', //选中的店面
 				dataValue: '', //选中时间
 				tableData: [{
@@ -129,7 +136,7 @@
 						brand: "现代",
 						carSeries: "瑞纳",
 						Model: "瑞纳2014款三厢1.4L自动",
-						serviceItem:"更换机油,机滤,检查空气滤芯,专用机油"
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油"
 					},
 					{
 						order: "222222222222",
@@ -201,7 +208,7 @@
 		},
 		methods: {
 			handleSelectChange(e) {
-				console.log("当前选中的是店铺" + e)
+				console.log("当前选中分类是" + e)
 			},
 			onChange(e) {
 				console.log("选中的开始时间是:" + e[0])
@@ -221,12 +228,16 @@
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
 			}
-
-
 		}
 	};
 </script>
 
+<style>
+	.el-date-editor .el-range-separator,
+	.el-date-editor .el-range__icon {
+		line-height: 25px !important;
+	}
+</style>
 <style scoped lang="scss">
 	.diaBox {
 		font-size: 12px;
@@ -236,42 +247,43 @@
 		justify-content:flex-end;
 		align-items: center;
 	}
-
+	
 	#makeBox {
 		width: 100%;
 		height: 100%;
 		background: #fff;
 	}
-
+	
 	.dialogBox {
 		color: #000;
 		font-size: 18px;
 		margin-left: 10px;
 	}
-
+	
 	.makeTop {
 		padding: 0 20px;
 		width: 100%;
 		height: 80px;
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 	}
-
+	
 	label {
 		color: #000;
 		font-size: 18px;
 		margin-right: 10px;
 	}
-
+	
 	.makeTopBox {
 		margin-right: 100px;
 	}
-
+	
 	.el-date-editor .el-range-separator {
 		width: 50px !important;
 		font-size: 100px !important;
 	}
-
+	
 	.el-range-input {
 		margin-left: 100px !important;
 	}
