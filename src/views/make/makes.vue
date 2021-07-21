@@ -239,6 +239,7 @@
 	}
 </style>
 <style scoped lang="scss">
+	
 	.diaBox {
 		font-size: 12px;
 		width: 100%;
@@ -266,7 +267,6 @@
 		height: 80px;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 	}
 	
 	label {

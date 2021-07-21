@@ -17,7 +17,7 @@
 				</div>
 			</div>
 			<div style="margin-right: 30px;">
-				<el-button type="primary">添加商品</el-button>
+				<el-button type="danger" @click="addCondition">添加商品</el-button>
 			</div>
 		</div>
 		<div id="tableBox">
@@ -101,10 +101,14 @@
 							particulars:"更换机油,机滤,检查空气滤芯,专用机油",
 							price:'100',
 							aggregate:100,
-							subbranch:{//分店库存
-								dian1:10,
-								dian2:90
+							subbranch:[{
+								name:"店面1",
+								num:"10"
 							},
+							{
+								name:"店面2",
+								num:"90"
+							}],
 							advertisement:[],//广告图用于app上方轮播最多6张
 							patternmaking:'',//产品展示图，用于分类产品入口
 							details:[]//产品详情图
@@ -134,6 +138,17 @@
 			},
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
+			},
+			addCondition(){//添加按钮
+				console.log("点击了添加按钮")
+				// 在点击添加按钮之后给添加页面传值
+				this.$router.push({
+				  name: 'operation',
+				  query: {
+				    tit: "添加商品"
+				  }
+				})
+				
 			}
 
 
