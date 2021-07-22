@@ -1,60 +1,105 @@
 <template>
-	<div>
-		<div class="makes-box">
-			<!-- 内容 -->
-			<div class="makes-content">
-				<div class="makes-content-h">
-					<div class="makes-content-h-store">
-						<span>店铺选择</span>
-						<select>
-							<option value="全部">全部</option>
-							<option value="全部1">全部1</option>
-							<option value="全部2">全部2</option>
-						</select>
-					</div>
-					<div class="makes-content-h-time">
-						<div class="block">
-							<span class="demonstration">下单时间</span>
-							<el-date-picker v-model="value" type="daterange" align="right" unlink-panels
-								range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-								:picker-options="pickerOptions2"  style="height: 25px; padding: 0 10px;vertical-align: middle;">
-							</el-date-picker>
-							<button>查询</button>
-						</div>
-					</div>
-				</div>
-				<!-- 表格 -->
-				<div class="makes-content-table">
-					<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" border style="width: 100%" :header-cell-style="{'background-color': '' }"> 
-						<el-table-column fixed type="selection" width="55" label="全选">
-						</el-table-column>
-						<el-table-column  prop="ordernumber" label="订单号" width="200">
-						</el-table-column>
-						<el-table-column prop="ordername" label="订单名称" width="200">
-						</el-table-column>
-						<el-table-column prop="orderamount" label="订单金额(元)" width="150">
-						</el-table-column>
-						<el-table-column prop="state" label="状态" width="150">
-						</el-table-column>
-						<el-table-column prop="date" label="预约时间" width="300">
-						</el-table-column>
-						<el-table-column fixed="right" label="操作" width="150">
-							<template slot-scope="scope">
-								<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
-								<!-- <el-button type="text" size="small">编辑</el-button> -->
-							</template>
-						</el-table-column>
-					</el-table>
-				</div>
-				<!-- 分页 -->
-				<div class="makes-content-pages">
-					<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-						:current-page.sync="currpage"  :page-size="pagesize"
-						layout="total, prev, pager, next, jumper" :total="tableData.length">
-					</el-pagination>
-				</div>
+
+	<div id="makeBox">
+		<div class="makeTop">
+			<div class="makeTopBox">
+				<label>店铺</label>
+				<el-select v-model="selectItem" placeholder="请选择店铺" @change="handleSelectChange">
+					<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
+				</el-select>
+			</div>
+			<div class="makeTopBox block">
+				<label>下单时间</label>
+				<el-date-picker @change="onChange" v-model="dataValue" type="daterange" range-separator="~"
+					value-format="yyyy 年 MM 月 dd 日" start-placeholder="开始日期" end-placeholder="结束日期">
+				</el-date-picker>
+			</div>
+			<div>
+				<el-button type="primary" icon="el-icon-search">搜索</el-button>
 			</div>
 		</div>
+		<div id="tableBox">
+			<el-table :data="tableData" style="width: 100%" size="medium">
+				<el-table-column prop="order" label="订单编号">
+				</el-table-column>
+				<el-table-column prop="formName" label="订单名称">
+				</el-table-column>
+				<el-table-column prop="orderMoney" label="订单金额(￥)">
+				</el-table-column>
+				<el-table-column label="状态">
+					<template slot-scope="scope">
+						<span style="color:#f00" v-if="scope.row.condition=='已完成'">{{scope.row.condition}}</span>
+						<span style="color:#2F9E45" v-if="scope.row.condition=='未完成'">{{scope.row.condition}}</span>
+						<span style="color:#FF8800" v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="orderData" label="预约时间">
+				</el-table-column>
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="success" plain>详情
+						</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!-- 分页 -->
+			<div
+				style="background-color: #fff; width: 100%; height: 52px; display: flex; padding-top:10px ; justify-content:flex-end;padding-right: 80px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					:current-page="currentPage4" :page-size="10" layout="total, prev, pager, next, jumper" :total="400">
+				</el-pagination>
+
+
+			</div>
+		</div>
+		<!-- 模态框 -->
+		<el-dialog :title="'订单编号：'+dialogItem[0].order" :visible.sync="centerDialogVisible" width="45%">
+			<div style="width: 100%;">
+				<div style="font-weight: 700; font-size: 20px; margin-bottom: 10px;">客户信息:</div>
+				<el-table :data="dialogItem" size="mini">
+					<el-table-column property="userName" label="姓名" width="95"></el-table-column>
+					<el-table-column property="phone" label="手机号" width="95"></el-table-column>
+					<el-table-column property="plate" label="车牌" width="95"></el-table-column>
+					<el-table-column property="brand" label="车辆品牌" width="95"></el-table-column>
+					<el-table-column property="carSeries" label="车系" width="100"></el-table-column>
+					<el-table-column property="Model" label="车型"></el-table-column>
+				</el-table>
+				<div style="font-weight: 700; font-size: 20px; margin: 10px; 0">订单信息:</div>
+				<el-table :data="dialogItem" size="mini">
+					<el-table-column property="formName" label="服务名称" width="95"></el-table-column>
+					<el-table-column label="状态" width="95">
+						<template slot-scope="scope">
+							<span style="color:#f00; padding: 2px 4px; border-radius: 2px; border: 1px solid #f00;"
+								v-if="scope.row.condition=='已完成'">{{scope.row.condition}}</span>
+							<span
+								style="color:#2F9E45; padding: 2px 4px; border-radius: 2px; border: 1px solid #2F9E45;"
+								v-if="scope.row.condition=='未完成'">{{scope.row.condition}}</span>
+							<span
+								style="color:#FF8800; padding: 2px 4px; border-radius: 2px; border: 1px solid #FF8800;"
+								v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column property="cost" label="订单价格(￥)" width="95"></el-table-column>
+					<el-table-column property="discount" label="折扣(￥)" width="95"></el-table-column>
+					<el-table-column property="orderMoney" label="实付(￥)" width="100">
+						<template slot-scope="scope">
+							<span style="color:#f00; ">{{scope.row.orderMoney}}</span>
+						</template>
+
+					</el-table-column>
+					<el-table-column property="serviceItem" label="服务项目"></el-table-column>
+				</el-table>
+			</div>
+			<div class="diaBox">
+				下单时间：{{dialogItem[0].orderData}} / 到店完成时间：{{ dialogItem[0].perform }}
+			</div>
+
+
+
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -62,168 +107,184 @@
 	export default {
 		data() {
 			return {
-				pickerOptions2: {
-					shortcuts: [{
-						text: '最近一周',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-							picker.$emit('pick', [start, end]);
-						}
-					}, {
-						text: '最近一个月',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-							picker.$emit('pick', [start, end]);
-						}
-					}, {
-						text: '最近三个月',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-							picker.$emit('pick', [start, end]);
-						}
-					}]
-				},
-				value: '',
+				centerDialogVisible: false, //模态框的状态
+				currentPage4: 4,
+				select: [{
+						dian: "店面1",
+						code: "001"
+					},
+					{
+						dian: "店面2",
+						code: "002"
+					}
+				],
+				dialogItem: [{}], //点击详情时看到的数据
+				selectItem: '', //选中的店面
+				dataValue: '', //选中时间
 				tableData: [{
-					ordernumber:'0001',
-					ordername: '小保养',
-					orderamount:'888',
-					state:'已完成',
-					date: '2016-05-02'
-				}, {
-					ordernumber:'0002',
-					ordername: '小保养',
-					orderamount:'2888',
-					state:'已完成',
-					date: '2016-05-02'
-				}, {
-					ordernumber:'0003',
-					ordername: '小保养',
-					orderamount:'3888',
-					state:'已完成',
-					date: '2016-05-02'
-				}],
-				multipleSelection: [],
-				currentPage1:1,
-				pagesize:1,   // 每页的数据条数
-				currpage:1,  // 默认开始页面
+						order: "333333333333",
+						formName: "保养",
+						cost: 130, //真实价格
+						orderMoney: "100", //到店实付
+						discount: 30,
+						condition: "已完成",
+						orderData: "2021 年 07 月 13 日",
+						perform: "2021 年 07 月 14 日", //完成时间
+						userName: "宋先生",
+						phone: "13663665247",
+						plate: "晋E36489",
+						brand: "现代",
+						carSeries: "瑞纳",
+						Model: "瑞纳2014款三厢1.4L自动",
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油"
+					},
+					{
+						order: "222222222222",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "未完成",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "111111111111",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "进行中",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "未完成",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "未完成",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "进行中",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "未完成",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "进行中",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "未完成",
+						orderData: "2021 年 07 月 13 日"
+					},
+					{
+						order: "xxxxx",
+						formName: "保养",
+						orderMoney: "100",
+						condition: "进行中",
+						orderData: "2021 年 07 月 13 日"
+					},
+
+				]
+
 			};
 		},
 		methods: {
-			// 详情
-			handleClick(row) {
-				console.log(row);
-				this.$router.push()
+			handleSelectChange(e) {
+				console.log("当前选中分类是" + e)
 			},
-			// 分页--每页条数
+			onChange(e) {
+				console.log("选中的开始时间是:" + e[0])
+				console.log("选中的结束时间是:" + e[1])
+			},
+			handleEdit(index, row) {
+				console.log(index, row);
+				this.centerDialogVisible = true
+				this.dialogItem[0] = row
+			},
+			handleDelete(index, row) {
+				console.log(index, row);
+			},
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
-				this.pagesize = val
 			},
-			// 当前页
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
-				this.currpage = val
 			}
 		}
 	};
 </script>
 
 <style>
-  .el-date-editor .el-range-separator,
-  .el-date-editor .el-range__icon{
-  		line-height: 25px!important;
-  }
-</style>
-<style scoped lang="scss">
-	.makes-box {
-		height: 100vh;
-		background-color: #DEE5E7;
-		// 内容
-		.makes-content {
-			// margin-top: 60px;
-			padding-left: 25px;
-			padding-right: 50px;
-
-			.makes-content-h {
-				overflow: hidden;
-				padding: 35px 0;
-
-				.makes-content-h-store {
-					float: left;
-					margin-right: 240px;
-
-					span {
-						display: inline-block;
-						width: 72px;
-						height: 25px;
-						line-height: 25px;
-						opacity: 1;
-						font-size: 18px;
-						color: #363636;
-						margin-right: 17px;
-						vertical-align: middle;
-					}
-
-					select {
-						width: 141px;
-						height: 25px;
-						line-height: 25px;
-						opacity: 1;
-						background: #ffffff;
-						border-radius: 3px;
-						border: none;
-						color: #000000;
-						vertical-align: middle;
-					}
-				}
-
-				.makes-content-h-time {
-					float: left;
-
-					.block {
-						.el-range-editor.el-input__inner {
-							justify-content: space-between;
-						}
-						.demonstration {
-							width: 72px;
-							height: 25px;
-							opacity: 1;
-							font-size: 18px;
-							color: #363636;
-							margin-right: 17px;
-							vertical-align: middle;
-						}
-					}
-					button {
-						width: 48px;
-						height: 25px;
-						background: #ffffff;
-						border-radius: 3px;
-						border: none;
-						margin-left: 25px;
-						vertical-align: middle;
-					}
-				}
-			}
-			.makes-content-pages{
-				text-align: right;
-				padding: 30px 0;
-				
-			}
-			.el-table--border, .el-table--group{
-				border: none;
-			}
-			.el-pagination button{
-				background-color: #DEE5E7;
-			}
-		}
+	.el-date-editor .el-range-separator,
+	.el-date-editor .el-range__icon {
+		line-height: 25px !important;
 	}
 </style>
-
+<style scoped lang="scss">
+	
+	.diaBox {
+		font-size: 12px;
+		width: 100%;
+		height: 30px;
+		display: flex;
+		justify-content:flex-end;
+		align-items: center;
+	}
+	
+	#makeBox {
+		width: 100%;
+		height: 100%;
+		background: #fff;
+	}
+	
+	.dialogBox {
+		color: #000;
+		font-size: 18px;
+		margin-left: 10px;
+	}
+	
+	.makeTop {
+		padding: 0 20px;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+	}
+	
+	label {
+		color: #000;
+		font-size: 18px;
+		margin-right: 10px;
+	}
+	
+	.makeTopBox {
+		margin-right: 100px;
+	}
+	
+	.el-date-editor .el-range-separator {
+		width: 50px !important;
+		font-size: 100px !important;
+	}
+	
+	.el-range-input {
+		margin-left: 100px !important;
+	}
+</style>
