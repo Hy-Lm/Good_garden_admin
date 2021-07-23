@@ -4,7 +4,8 @@
 			<div style="display: flex;">
 				<div class="makeTopBox">
 					<label>商品分类</label>
-					<el-select v-model="selectItem" placeholder="请选择商品类型" @change="handleSelectChange" style="width: 200px;">
+					<el-select v-model="selectItem" placeholder="请选择商品类型" @change="handleSelectChange"
+						style="width: 200px;">
 						<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
 					</el-select>
 				</div>
@@ -31,7 +32,8 @@
 				<el-table-column label="商品详情" prop="condition">
 					<template slot-scope="scope">
 						<el-tooltip :content="scope.row.particulars" placement="top-start" effect="light">
-						 <span style=" white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{scope.row.particulars}}</span>
+							<span
+								style=" white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{scope.row.particulars}}</span>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -41,7 +43,7 @@
 					<template slot-scope="scope">
 						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="success" plain>详情
 						</el-button>
-						<el-button size="mini" @click="" type="primary" plain>编辑
+						<el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="primary" plain>编辑
 						</el-button>
 						<el-button size="mini" @click="" type="danger" plain>删除
 						</el-button>
@@ -57,7 +59,7 @@
 			</div>
 		</div>
 		<!-- 模态框 -->
-	
+
 	</div>
 </template>
 
@@ -65,9 +67,8 @@
 	export default {
 		data() {
 			return {
-				input:'',
-				centerDialogVisible: false, //模态框的状态
-				currentPage4: 4,
+				input: '',
+				currentPage4: 1,
 				select: [{
 						dian: "生活精品",
 						code: "990"
@@ -80,39 +81,79 @@
 				selectItem: '', //选中的店面
 				dataValue: '', //选中时间
 				tableData: [{
-						category:"美容清洗",
-						serial:"0012202154",
-						designation:"小保养",
-						particulars:"更换机油,机滤,检查空气滤芯,专用机油",
-						price:'100',
-						aggregate:100,
-						subbranch:{//分店库存
-							dian1:10,
-							dian2:90
-						},
-						advertisement:[],//广告图用于app上方轮播最多6张
-						patternmaking:'',//产品展示图，用于分类产品入口
-						details:[]//产品详情图
-					},
-					{
-							category:"美容清洗",
-							serial:"0012202154",
-							designation:"小保养",
-							particulars:"更换机油,机滤,检查空气滤芯,专用机油",
-							price:'100',
-							aggregate:100,
-							subbranch:[{
-								name:"店面1",
-								num:"10"
+						category: "美容清洗",
+						serial: "0012202154",
+						designation: "小保养",
+						particulars: "更换机油,机滤,检查空气滤芯,专用机油",
+						price: '100',
+						aggregate: 280,
+						subbranch: [{
+								name: "爱车益园总店",
+								num: "10"
 							},
 							{
-								name:"店面2",
-								num:"90"
-							}],
-							advertisement:[],//广告图用于app上方轮播最多6张
-							patternmaking:'',//产品展示图，用于分类产品入口
-							details:[]//产品详情图
-						}
+								name: "爱车益园星河皓月店1",
+								num: "90"
+							},
+							{
+								name: "爱车益园星河皓月店2",
+								num: "90"
+							},
+							{
+								name: "爱车益园星河皓月店3",
+								num: "90"
+							}
+						],
+						advertisement: [{
+							name: 'food.jpeg',
+							url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						}], //广告图用于app上方轮播最多6张
+						patternmaking: [{
+							name: 'food.jpeg',
+							url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						}], //产品展示图，用于分类产品入口
+						details: [{
+							name: 'food.jpeg',
+							url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						}] //产品详情图
+					},
+					{
+						category: "美容清洗",
+						serial: "0012202154",
+						designation: "小保养",
+						particulars: "更换机油,机滤,检查空气滤芯,专用机油",
+						price: '100',
+						aggregate: 280,
+						subbranch: [{
+								name: "爱车益园总店",
+								num: "10"
+							},
+							{
+								name: "爱车益园星河皓月店1",
+								num: "90"
+							},
+							{
+								name: "爱车益园星河皓月店2",
+								num: "90"
+							},
+							{
+								name: "爱车益园星河皓月店3",
+								num: "90"
+							}
+						],
+						advertisement: [{
+							name: 'food.jpeg',
+							url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						}], //广告图用于app上方轮播最多6张
+						patternmaking: [{
+							name: 'food.jpeg',
+							url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						}], //产品展示图，用于分类产品入口
+						details: [{
+							name: 'food.jpeg',
+							url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+						}] //产品详情图
+					}
 				]
 
 			};
@@ -125,13 +166,26 @@
 				console.log("选中的开始时间是:" + e[0])
 				console.log("选中的结束时间是:" + e[1])
 			},
-			handleEdit(index, row) {
+			handleEdit(index, row) { //详情按钮
 				console.log(index, row);
-				this.centerDialogVisible = true
-				this.dialogItem[0] = row
+				this.$router.push({
+					name: 'operation',
+					query: {
+						tit: "商品详情",
+						row: row
+					}
+				})
+
 			},
 			handleDelete(index, row) {
 				console.log(index, row);
+				this.$router.push({
+					name: 'operation',
+					query: {
+						tit: "编辑商品库存",
+						row: row
+					}
+				})
 			},
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
@@ -139,16 +193,16 @@
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
 			},
-			addCondition(){//添加按钮
+			addCondition() { //添加按钮
 				console.log("点击了添加按钮")
 				// 在点击添加按钮之后给添加页面传值
 				this.$router.push({
-				  name: 'operation',
-				  query: {
-				    tit: "添加商品"
-				  }
+					name: 'operation',
+					query: {
+						tit: "添加商品库存"
+					}
 				})
-				
+
 			}
 
 
@@ -162,7 +216,7 @@
 		width: 100%;
 		height: 30px;
 		display: flex;
-		justify-content:flex-end;
+		justify-content: flex-end;
 		align-items: center;
 	}
 
