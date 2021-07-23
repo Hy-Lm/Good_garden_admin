@@ -1,7 +1,7 @@
 import setting from '@/setting.js'
 
 export default {
-  namespaced: true,
+  namespaced: false,
   state: {
     // 搜索面板激活状态
     active: false,

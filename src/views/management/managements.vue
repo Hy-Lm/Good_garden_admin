@@ -12,7 +12,7 @@
 
 		<!-- 表格 -->
 		<div class="man-content-table">
-			<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" border style="width: 100%"
+			<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)"  style="width: 100%"
 				class="tablebox">
 				<el-table-column prop="username" label="用户姓名" width="200">
 				</el-table-column>
@@ -29,7 +29,7 @@
 				<el-table-column fixed="right" label="操作" width="150">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="success" size="small" plain>详情</el-button>
-						<el-button @click="delClick(scope.$index)" type="success" size="small" plain>删除</el-button>
+						<el-button @click="delClick(scope.$index)" type="danger" size="small" plain>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -47,11 +47,11 @@
 			<div style="width: 100%;">
 				<div style="font-weight: 700; font-size: 20px; margin-bottom: 10px;">客户信息:</div>
 				<el-table :data="details" size="mini">
-					<el-table-column property="username" label="用户" width="95"></el-table-column>
-					<el-table-column property="phone" label="电话" width="95"></el-table-column>
-					<el-table-column property="date" label="加入时间" width="120"></el-table-column>
-					<el-table-column property="integral" label="积分" width="95"></el-table-column>
-					<el-table-column property="vip" label="vip" width="95"></el-table-column>
+					<el-table-column property="username" label="用户" ></el-table-column>
+					<el-table-column property="phone" label="电话" ></el-table-column>
+					<el-table-column property="date" label="加入时间" ></el-table-column>
+					<el-table-column property="integral" label="积分"></el-table-column>
+					<el-table-column property="vip" label="vip" ></el-table-column>
 				</el-table>
 				<div style="font-weight: 700; font-size: 20px; margin: 10px 0;">消费记录:</div>
 				<el-table :data="details" size="mini">
@@ -63,8 +63,11 @@
 					<el-table-column property="consumption" label="消费时间" width="150"></el-table-column>
 				</el-table>
 			</div>
-			<div class="diaBox" style="float: right; margin-top: 15px;">
-				下单时间：{{details[0].ordertime}} / 到店完成时间：{{ details[0].endtime }}
+			<div class="diaBox" style="width: 100%; display: flex; justify-content:flex-end; margin-top: 15px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
+					:total="tableData.length">
+				</el-pagination>
 			</div>
 			<span slot="footer" class="dialog-footer">
 				<el-button type="primary" @click="modal = false">确 定</el-button>
@@ -374,7 +377,7 @@
 <style scoped lang="scss">
 	.man-box {
 		height: 100%;
-		background-color: #DEE5E7;
+		background-color: #fff;
 	}
 
 	.man-box-h {
