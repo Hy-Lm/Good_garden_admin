@@ -2,12 +2,16 @@
 
 	<div id="makeBoxs">
 		<div class="makeTop">
-			<div  style="display: flex;">
+			<div style="display: flex;">
 				<div class="makeTopBox">
 					<label>店铺</label>
 					<el-select v-model="selectItem" placeholder="请选择店铺" @change="handleSelectChange">
 						<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
 					</el-select>
+				</div>
+				<div class="makeTopBox">
+					<label>订单编号</label>
+					<el-input v-model="input" placeholder="请输入您要搜索的订单编号" style="width: 200px;"></el-input>
 				</div>
 				<div class="makeTopBox block">
 					<label>下单时间</label>
@@ -19,9 +23,12 @@
 					<el-button type="primary" icon="el-icon-search">搜索</el-button>
 				</div>
 			</div>
+			
 		</div>
 		<div id="tableBox">
 			<el-table :data="tableData" style="width: 100%" size="medium">
+				<el-table-column prop="makeTopBox" label="店面">
+				</el-table-column>
 				<el-table-column prop="order" label="订单编号">
 				</el-table-column>
 				<el-table-column prop="formName" label="订单名称">
@@ -30,9 +37,9 @@
 				</el-table-column>
 				<el-table-column label="状态">
 					<template slot-scope="scope">
-						<span style="color:#f00" v-if="scope.row.condition=='已完成'">{{scope.row.condition}}</span>
-						<span style="color:#2F9E45" v-if="scope.row.condition=='未完成'">{{scope.row.condition}}</span>
-						<span style="color:#FF8800" v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span>
+						<span style="color:#f00" v-if="scope.row.condition==1">已完成</span>
+						<span style="color:#2F9E45" v-if="scope.row.condition==2">未完成</span>
+						<!-- <span style="color:#FF8800" v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span> -->
 					</template>
 				</el-table-column>
 				<el-table-column prop="orderData" label="预约时间">
@@ -40,6 +47,8 @@
 				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="success" plain>详情
+						</el-button>
+						<el-button size="mini" @click="" type="danger" plain :disabled="scope.row.disabled">完成
 						</el-button>
 					</template>
 				</el-table-column>
@@ -68,22 +77,23 @@
 				</el-table>
 				<div style="font-weight: 700; font-size: 20px; margin: 10px; 0">订单信息:</div>
 				<el-table :data="dialogItem" size="mini">
-					<el-table-column property="formName" label="服务名称" width="95"></el-table-column>
-					<el-table-column label="状态" width="95">
+					<el-table-column property="makeTopBox" label="店面" width="80"></el-table-column>
+					<el-table-column property="formName" label="服务名称" width="80"></el-table-column>
+					<el-table-column label="状态" width="80">
 						<template slot-scope="scope">
 							<span style="color:#f00; padding: 2px 4px; border-radius: 2px; border: 1px solid #f00;"
-								v-if="scope.row.condition=='已完成'">{{scope.row.condition}}</span>
+								v-if="scope.row.condition==1">已完成</span>
 							<span
 								style="color:#2F9E45; padding: 2px 4px; border-radius: 2px; border: 1px solid #2F9E45;"
-								v-if="scope.row.condition=='未完成'">{{scope.row.condition}}</span>
-							<span
+								v-if="scope.row.condition==2">未完成</span>
+							<!-- <span
 								style="color:#FF8800; padding: 2px 4px; border-radius: 2px; border: 1px solid #FF8800;"
-								v-if="scope.row.condition=='进行中'">{{scope.row.condition}}</span>
+								v-if="scope.row.condition==3">已送达</span> -->
 						</template>
 					</el-table-column>
-					<el-table-column property="cost" label="订单价格(￥)" width="95"></el-table-column>
-					<el-table-column property="discount" label="折扣(￥)" width="95"></el-table-column>
-					<el-table-column property="orderMoney" label="实付(￥)" width="100">
+					<el-table-column property="cost" label="订单价格(￥)" width="90"></el-table-column>
+					<el-table-column property="discount" label="折扣(￥)" width="80"></el-table-column>
+					<el-table-column property="orderMoney" label="实付(￥)" width="80">
 						<template slot-scope="scope">
 							<span style="color:#f00; ">{{scope.row.orderMoney}}</span>
 						</template>
@@ -124,84 +134,61 @@
 				selectItem: '', //选中的店面
 				dataValue: '', //选中时间
 				tableData: [{
+						makeTopBox: "北城区分店",
 						order: "333333333333",
 						formName: "保养",
 						cost: 130, //真实价格
 						orderMoney: "100", //到店实付
 						discount: 30,
-						condition: "已完成",
+						condition: 1,
 						orderData: "2021 年 07 月 13 日",
 						perform: "2021 年 07 月 14 日", //完成时间
 						userName: "宋先生",
 						phone: "13663665247",
 						plate: "晋E36489",
 						brand: "现代",
+						disabled: true,
 						carSeries: "瑞纳",
 						Model: "瑞纳2014款三厢1.4L自动",
 						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油"
 					},
 					{
-						order: "222222222222",
+						makeTopBox: "北城区分店",
+						order: "333332233333",
 						formName: "保养",
-						orderMoney: "100",
-						condition: "未完成",
-						orderData: "2021 年 07 月 13 日"
+						cost: 130, //真实价格
+						orderMoney: "100", //到店实付
+						discount: 30,
+						condition: 2,
+						orderData: "2021 年 07 月 13 日",
+						perform: "2021 年 07 月 14 日", //完成时间
+						userName: "宋先生",
+						phone: "13663665247",
+						plate: "晋E36489",
+						brand: "现代",
+						disabled: true,
+						carSeries: "瑞纳",
+						Model: "瑞纳2014款三厢1.4L自动",
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油"
 					},
 					{
-						order: "111111111111",
+						makeTopBox: "北城区分店",
+						order: "333332233333",
 						formName: "保养",
-						orderMoney: "100",
-						condition: "进行中",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "未完成",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "未完成",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "进行中",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "未完成",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "进行中",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "未完成",
-						orderData: "2021 年 07 月 13 日"
-					},
-					{
-						order: "xxxxx",
-						formName: "保养",
-						orderMoney: "100",
-						condition: "进行中",
-						orderData: "2021 年 07 月 13 日"
+						cost: 130, //真实价格
+						orderMoney: "100", //到店实付
+						discount: 30,
+						condition: 2,
+						orderData: "2021 年 07 月 13 日",
+						perform: "2021 年 07 月 14 日", //完成时间
+						userName: "宋先生",
+						phone: "13663665247",
+						plate: "晋E36489",
+						brand: "现代",
+						disabled: false,
+						carSeries: "瑞纳",
+						Model: "瑞纳2014款三厢1.4L自动",
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油"
 					},
 
 				]
@@ -271,7 +258,7 @@
 	}
 
 	.makeTopBox {
-		margin-right: 100px;
+		margin-right: 80px;
 	}
 
 	.el-date-editor .el-range-separator {
