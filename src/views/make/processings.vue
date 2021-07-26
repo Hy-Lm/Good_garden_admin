@@ -1,63 +1,124 @@
 <template>
-	<div class="pro-box">
-		<div class="pro-box-h">
-			<div class="pro-box-h-l">
-				<span>编号查询</span>
-				<el-input class="input" placeholder="全部" v-model="inquire">
-					<i slot="suffix" class="el-input__icon el-icon-search" @click="inquire"></i>
-				</el-input>
-			</div>
-			<div class="pro-box-h-c">
-				<span>搜索</span>
-				<el-input class="input" placeholder="全部" v-model="search">
-					<i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
-				</el-input>
-			</div>
-			<div class="pro-box-h-r">
-				<div class="block">
-					<span class="demonstration">下单时间</span>
-					<el-date-picker v-model="timeinquire" type="daterange" align="right" unlink-panels
-						range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-						:picker-options="pickerOptions2"  style="height: 25px; padding: 0 10px;vertical-align: middle;">
+
+	<div id="makeBoxs">
+		<div class="makeTop">
+			<div style="display: flex;">
+				<div class="makeTopBox">
+					<label>店铺</label>
+					<el-select v-model="selectItem" placeholder="请选择店铺" @change="handleSelectChange">
+						<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
+					</el-select>
+				</div>
+				<div class="makeTopBox block">
+					<label>下单时间</label>
+					<el-date-picker @change="onChange" v-model="dataValue" type="daterange" range-separator="~"
+						value-format="yyyy 年 MM 月 dd 日" start-placeholder="开始日期" end-placeholder="结束日期">
 					</el-date-picker>
-					<button>查询</button>
+				</div>
+				<div>
+					<el-button type="primary" icon="el-icon-search">搜索</el-button>
 				</div>
 			</div>
 		</div>
-
-		<!-- 表格 -->
-		<div class="pro-content-table">
-			<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" border style="width: 100%"
-				:header-cell-style="{'background-color': '' }">
-				<el-table-column fixed type="selection" width="55" label="全选">
+		<div id="tableBox">
+			<el-table :data="tableData" style="width: 100%" size="medium">
+				<el-table-column prop="order" label="订单编号">
 				</el-table-column>
-				<el-table-column prop="orderNumber" label="订单编号" width="150">
+				<el-table-column prop="formName" label="用户名">
 				</el-table-column>
-				<el-table-column prop="productName" label="产品名称" width="200">
+				<el-table-column prop="orderMoney" label="用户手机号">
 				</el-table-column>
-				<el-table-column prop="money" label="交易金额" width="150">
+				<el-table-column prop="orderMoney" label="商品">
 				</el-table-column>
-				<el-table-column prop="date" label="交易时间" width="150">
-				</el-table-column>
-				<el-table-column prop="count" label="数量" width="100">
-				</el-table-column>
-				<el-table-column prop="status" label="状态" width="300">
-				</el-table-column>
-				<el-table-column fixed="right" label="操作" width="150">
+				<el-table-column label="配送地址" width="200">
 					<template slot-scope="scope">
-						<el-button type="text" size="small">发货</el-button>
-						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+						<el-tooltip :content="scope.row.dizhi" placement="left" effect="light">
+							<span
+								style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{scope.row.dizhi}}</span>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<el-table-column label="状态">
+					<template slot-scope="scope">
+						<span style="color:#f00; padding: 2px 4px;"
+							v-if="scope.row.condition==1">未发货</span>
+						<span style="color:#FF8800; padding: 2px 4px;"
+							v-if="scope.row.condition==2">已发货</span>
+						<span style="color:#2F9E45; padding: 2px 4px; "
+							v-if="scope.row.condition==3">已送达</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="orderData" label="下单时间">
+				</el-table-column>
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="success" plain>详情
+						</el-button>
+						<el-button size="mini" v-if="scope.row.condition==1"  @click="" type="danger" plain
+							:disabled="scope.row.disabled">发货
+						</el-button>
+						<el-button size="mini" v-if="scope.row.condition==2"  @click="" type="danger" plain
+							:disabled="scope.row.disabled">送达
+						</el-button>
+						<el-button size="mini" v-if="scope.row.condition==3"  @click="" type="danger" plain
+							:disabled="scope.row.disabled">完成
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
+			<!-- 分页 -->
+			<div
+				style="background-color: #fff; width: 100%; height: 52px; display: flex; padding-top:10px ; justify-content:flex-end;padding-right: 80px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					:current-page="currentPage4" :page-size="10" layout="total, prev, pager, next, jumper" :total="400">
+				</el-pagination>
+
+			</div>
 		</div>
-		<!-- 分页 -->
-		<div class="pro-content-pages">
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-				:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
-				:total="tableData.length">
-			</el-pagination>
-		</div>
+		<!-- 模态框 -->
+		<el-dialog :title="'订单编号：'+dialogItem[0].order" :visible.sync="centerDialogVisible" width="45%">
+			<div style="width: 100%;">
+				<div style="font-weight: 700; font-size: 20px; margin-bottom: 10px;">客户信息:</div>
+				<el-table :data="dialogItem" size="mini">
+					<el-table-column property="userName" label="姓名" width="95"></el-table-column>
+					<el-table-column property="phone" label="手机号" width="95"></el-table-column>
+					<el-table-column property="plate" label="车牌" width="95"></el-table-column>
+					<el-table-column property="brand" label="车辆品牌" width="95"></el-table-column>
+					<el-table-column property="carSeries" label="车系" width="100"></el-table-column>
+					<el-table-column property="Model" label="车型"></el-table-column>
+				</el-table>
+				<div style="font-weight: 700; font-size: 20px; margin: 10px; 0">订单信息:</div>
+				<el-table :data="dialogItem" size="mini">
+					<el-table-column property="formName" label="服务名称" width="80"></el-table-column>
+					<el-table-column label="状态" width="80">
+						<template slot-scope="scope">
+							<span style="color:#f00; padding: 2px 4px; border-radius: 2px; border: 1px solid #f00;"
+								v-if="scope.row.condition==1">未发货</span>
+							<span
+								style="color:#FF8800; padding: 2px 4px; border-radius: 2px; border: 1px solid #FF8800;"
+								v-if="scope.row.condition==2">已发货</span>
+							<span
+								style="color:#2F9E45 ; padding: 2px 4px; border-radius: 2px; border: 1px solid #2F9E45;"
+								v-if="scope.row.condition==3">已送达</span>
+						</template>
+					</el-table-column>
+					<el-table-column property="cost" label="订单价格(￥)" width="85"></el-table-column>
+					<el-table-column property="discount" label="折扣(￥)" width="80"></el-table-column>
+					<el-table-column property="orderMoney" label="实付(￥)" width="80">
+						<template slot-scope="scope">
+							<span style="color:#f00; ">{{scope.row.orderMoney}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column property="dizhi" label="服务项目"></el-table-column>
+				</el-table>
+			</div>
+			<div class="diaBox">
+				下单时间：{{dialogItem[0].orderData}} / 收货时间：{{ dialogItem[0].perform }}
+			</div>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -65,195 +126,159 @@
 	export default {
 		data() {
 			return {
-				restaurants: [],
-				state: '',
-				inquire: '',  //编号查询
-				search: '',// 搜索
-				timeinquire:'', // 时间查询
-				pickerOptions: {
-					disabledDate(time) {
-						return time.getTime() > Date.now();
+				centerDialogVisible: false, //模态框的状态
+				currentPage4: 4,
+				select: [{
+						dian: "店面1",
+						code: "001"
 					},
-					shortcuts: [{
-						text: '今天',
-						onClick(picker) {
-							picker.$emit('pick', new Date());
-						}
-					}, {
-						text: '昨天',
-						onClick(picker) {
-							const date = new Date();
-							date.setTime(date.getTime() - 3600 * 1000 * 24);
-							picker.$emit('pick', date);
-						}
-					}, {
-						text: '一周前',
-						onClick(picker) {
-							const date = new Date();
-							date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-							picker.$emit('pick', date);
-						}
-					}]
-				},
-				value1: '', // 选择日期
-				options: [],
-				value: '', // 分类查询
+					{
+						dian: "店面2",
+						code: "002"
+					}
+				],
+				dialogItem: [{}], //点击详情时看到的数据
+				selectItem: '', //选中的店面
+				dataValue: '', //选中时间
 				tableData: [{
-					orderNumber: '0001',
-					productName: '通用玻璃',
-					money:'1488.00',
-					date: '2016-05-02',
-					count:'2',
-					status:'已发货'
-				}, {
-					orderNumber: '0002',
-					productName: '通用玻璃',
-					money:'1488.00',
-					date: '2016-05-02',
-					count:'4',
-					status:'已发货'
-				}, {
-					orderNumber: '0003',
-					productName: '通用玻璃',
-					money:'1488.00',
-					date: '2016-05-02',
-					count:'6',
-					status:'已发货'
-				}],
-				multipleSelection: [],
-				currentPage1: 1,
-				pagesize: 1, // 每页的数据条数
-				currpage: 1, // 默认开始页面
+						order: "333333113333",
+						formName: "保养",
+						cost: 130, //真实价格
+						orderMoney: "100", //到店实付
+						discount: 30,
+						condition: 1,
+						orderData: "2021 年 07 月 13 日",
+						perform: "2021 年 07 月 14 日", //完成时间
+						userName: "宋先生",
+						phone: "13663665247",
+						plate: "晋E36489",
+						brand: "现代",
+						disabled: false,
+						carSeries: "瑞纳",
+						Model: "瑞纳2014款三厢1.4L自动",
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油",
+						dizhi: "河北省 廊坊市 三河市 燕郊经济技术开发区 化大街189号图图便利店"
+					},
+					{
+						order: "333332233333",
+						formName: "保养",
+						cost: 130, //真实价格
+						orderMoney: "100", //到店实付
+						discount: 30,
+						condition: 2,
+						orderData: "2021 年 07 月 13 日",
+						perform: "2021 年 07 月 14 日", //完成时间
+						userName: "宋先生",
+						phone: "13663665247",
+						plate: "晋E36489",
+						brand: "现代",
+						disabled: false,
+						carSeries: "瑞纳",
+						Model: "瑞纳2014款三厢1.4L自动",
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油",
+						dizhi: "河北省 廊坊市 三河市 燕郊经济技术开发区 化大街189号图图便利店"
+					},
+					{
+						order: "333333333333",
+						formName: "保养",
+						cost: 130, //真实价格
+						orderMoney: "100", //到店实付
+						discount: 30,
+						condition: 3,
+						orderData: "2021 年 07 月 13 日",
+						perform: "2021 年 07 月 14 日", //完成时间
+						userName: "宋先生",
+						phone: "13663665247",
+						plate: "晋E36489",
+						brand: "现代",
+						disabled: true,
+						carSeries: "瑞纳",
+						Model: "瑞纳2014款三厢1.4L自动",
+						serviceItem: "更换机油,机滤,检查空气滤芯,专用机油",
+						dizhi: "河北省 廊坊市 三河市 燕郊经济技术开发区 化大街189号图图便利店"
+					},
+				]
+
 			};
 		},
 		methods: {
-			// 编号查询
-			inquire(ev) {
-				console.log(ev);
+			handleSelectChange(e) {
+				console.log("当前选中分类是" + e)
 			},
-			// 搜索
-			search(ev) {
-				console.log(ev);
+			onChange(e) {
+				console.log("选中的开始时间是:" + e[0])
+				console.log("选中的结束时间是:" + e[1])
 			},
-			// 时间查询
-			timeinquire(ev) {
-				console.log(ev);
+			handleEdit(index, row) {
+				console.log(index, row);
+				this.centerDialogVisible = true
+				this.dialogItem[0] = row
 			},
-			// 详情
-			handleClick(row) {
-				console.log(row);
-				this.$router.push()
+			handleDelete(index, row) {
+				console.log(index, row);
 			},
-			// 分页--每页条数
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
-				this.pagesize = val
 			},
-			// 当前页
 			handleCurrentChange(val) {
 				console.log(`当前页: ${val}`);
-				this.currpage = val
 			}
-		},
-		mounted() {
-
 		}
-	}
+	};
 </script>
 
-<style scoped="scoped">
-	.pro-box-h-l .el-input__inner ,
-	.pro-box-h-c .el-input__inner {
-		width: 160px;
-		height: 25px !important;
+<style>
+	.el-date-editor .el-range-separator,
+	.el-date-editor .el-range__icon {
 		line-height: 25px !important;
-	}
-
-	.pro-box-h .el-input__icon {
-		width: 17px !important;
-		height: 17px !important;
-		line-height: 25px !important;
-	}
-	/* 表格 */
-	.pro-content-table .el-table__body-wrapper .el-table_1_column_6  {
-			color: #EA4A3C;
 	}
 </style>
 <style scoped lang="scss">
-	.pro-box {
-		height: 100vh;
-		background-color: #DEE5E7;
+	.diaBox {
+		font-size: 12px;
+		width: 100%;
+		height: 30px;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
 	}
 
-	.pro-box-h {
-		padding: 40px 50px 40px 25px;
-		.pro-box-h-l {
-			float: left;
-			height: 25px;
-			margin-left: 25px;
-		}
-		.pro-box-h-c {
-			float: left;
-			height: 25px;
-			margin-left: 140px;
-		}
-		.pro-box-h-r {
-			float: right;
-			height: 25px;
-			.block {
-				.el-range-editor.el-input__inner {
-					justify-content: space-between;
-				}
-				.demonstration {
-					width: 72px;
-					height: 25px;
-					opacity: 1;
-					font-size: 18px;
-					color: #363636;
-					margin-right: 17px;
-					vertical-align: middle;
-				}
-			}
-			button {
-				width: 48px;
-				height: 25px;
-				background: #ffffff;
-				border-radius: 3px;
-				border: none;
-				margin-left: 25px;
-				vertical-align: middle;
-			}
-		}
-		span {
-			display: inline-block;
-			float: left;
-			width: auto;
-			height: 25px;
-			line-height: 25px;
-			opacity: 1;
-			font-size: 18px;
-			color: #363636;
-			margin-right: 17px;
-			vertical-align: middle;
-		}
+	#makeBoxs {
+		width: 100%;
+		height: 100%;
+		background: #fff;
 	}
-	// 表格
-	.pro-content-table{
-		padding-left: 25px;
-		padding-right: 50px;
-	}
-	// 分页
-	.pro-content-pages {
-		text-align: right;
-		padding: 30px 0;
 
+	.dialogBox {
+		color: #000;
+		font-size: 18px;
+		margin-left: 10px;
 	}
-	.el-table--border,
-	.el-table--group {
-		border: none;
+
+	.makeTop {
+		padding: 0 20px;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
 	}
-	.el-pagination button {
-		background-color: #DEE5E7;
+
+	label {
+		color: #000;
+		font-size: 18px;
+		margin-right: 10px;
+	}
+
+	.makeTopBox {
+		margin-right: 100px;
+	}
+
+	.el-date-editor .el-range-separator {
+		width: 50px !important;
+		font-size: 100px !important;
+	}
+
+	.el-range-input {
+		margin-left: 100px !important;
 	}
 </style>
-
