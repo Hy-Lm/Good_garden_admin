@@ -161,7 +161,7 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
 	.pro-box-h-l .el-input__inner ,
 	.pro-box-h-c .el-input__inner {
 		width: 160px;

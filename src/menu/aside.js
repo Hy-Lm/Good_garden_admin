@@ -13,10 +13,12 @@ export default [
     // },
 	// 预约管理
 	{
-	    title: '预约管理',
+	    title: '订单管理',
 	    icon: 'folder-o',
 	    children: [
-	        { path: '/make/makes', title: '预约管理' },
+	        { path: '/make/makes', title: '店面预约' },
+			{ path: '/make/processings', title: '配送管理' },
+			{ path: '/make/work', title: '外勤管理' },
 	      
 	    ]
 	},
@@ -40,29 +42,29 @@ export default [
 	    ]
 	},
 	// 订单处理
-	{
-	    title: '订单处理',
-	    icon: 'folder-o',
-	    children: [
-	        { path: '/processing/processings', title: '订单处理' },
+	// {
+	//     title: '订单处理',
+	//     icon: 'folder-o',
+	//     children: [
+	//         { path: '/processing/processings', title: '订单处理' },
 	      
-	    ]
-	},
+	//     ]
+	// },
 	// 退款管理
-	{
-	    title: '退款管理',
-	    icon: 'folder-o',
-	    children: [
-	        { path: '/refund/refunds', title: '退款管理' },
+	// {
+	//     title: '退款管理',
+	//     icon: 'folder-o',
+	//     children: [
+	//         { path: '/refund/refunds', title: '退款管理' },
 	      
-	    ]
-	},
+	//     ]
+	// },
 	// 图片管理
 	{
-	    title: '图片管理',
+	    title: '活动管理',
 	    icon: 'folder-o',
 	    children: [
-	        { path: '/picture/pictures', title: '图片管理' },
+	        { path: '/picture/pictures', title: '活动管理' },
 	      
 	    ]
 	},

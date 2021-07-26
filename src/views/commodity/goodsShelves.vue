@@ -1,5 +1,5 @@
 <template>
-	<div id="makeBox">
+	<div id="makeBoxs">
 		<div class="makeTop">
 			<div style="display: flex;">
 				<div class="makeTopBox">
@@ -162,10 +162,6 @@
 			handleSelectChange(e) {
 				console.log("当前选中分类是" + e)
 			},
-			onChange(e) {
-				console.log("选中的开始时间是:" + e[0])
-				console.log("选中的结束时间是:" + e[1])
-			},
 			handleEdit(index, row) { //详情按钮
 				console.log(index, row);
 				this.$router.push({
@@ -220,7 +216,7 @@
 		align-items: center;
 	}
 
-	#makeBox {
+	#makeBoxs {
 		width: 100%;
 		height: 100%;
 		background: #fff;
@@ -251,10 +247,6 @@
 		margin-right: 100px;
 	}
 
-	.el-date-editor .el-range-separator {
-		width: 50px !important;
-		font-size: 100px !important;
-	}
 
 	.el-range-input {
 		margin-left: 100px !important;

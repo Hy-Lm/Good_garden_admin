@@ -1,21 +1,23 @@
 <template>
 
-	<div id="makeBox">
+	<div id="makeBoxs">
 		<div class="makeTop">
-			<div class="makeTopBox">
-				<label>店铺</label>
-				<el-select v-model="selectItem" placeholder="请选择店铺" @change="handleSelectChange">
-					<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
-				</el-select>
-			</div>
-			<div class="makeTopBox block">
-				<label>下单时间</label>
-				<el-date-picker @change="onChange" v-model="dataValue" type="daterange" range-separator="~"
-					value-format="yyyy 年 MM 月 dd 日" start-placeholder="开始日期" end-placeholder="结束日期">
-				</el-date-picker>
-			</div>
-			<div>
-				<el-button type="primary" icon="el-icon-search">搜索</el-button>
+			<div  style="display: flex;">
+				<div class="makeTopBox">
+					<label>店铺</label>
+					<el-select v-model="selectItem" placeholder="请选择店铺" @change="handleSelectChange">
+						<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
+					</el-select>
+				</div>
+				<div class="makeTopBox block">
+					<label>下单时间</label>
+					<el-date-picker @change="onChange" v-model="dataValue" type="daterange" range-separator="~"
+						value-format="yyyy 年 MM 月 dd 日" start-placeholder="开始日期" end-placeholder="结束日期">
+					</el-date-picker>
+				</div>
+				<div>
+					<el-button type="primary" icon="el-icon-search">搜索</el-button>
+				</div>
 			</div>
 		</div>
 		<div id="tableBox">
@@ -239,28 +241,27 @@
 	}
 </style>
 <style scoped lang="scss">
-	
 	.diaBox {
 		font-size: 12px;
 		width: 100%;
 		height: 30px;
 		display: flex;
-		justify-content:flex-end;
+		justify-content: flex-end;
 		align-items: center;
 	}
-	
-	#makeBox {
+
+	#makeBoxs {
 		width: 100%;
 		height: 100%;
 		background: #fff;
 	}
-	
+
 	.dialogBox {
 		color: #000;
 		font-size: 18px;
 		margin-left: 10px;
 	}
-	
+
 	.makeTop {
 		padding: 0 20px;
 		width: 100%;
@@ -268,22 +269,22 @@
 		display: flex;
 		align-items: center;
 	}
-	
+
 	label {
 		color: #000;
 		font-size: 18px;
 		margin-right: 10px;
 	}
-	
+
 	.makeTopBox {
 		margin-right: 100px;
 	}
-	
+
 	.el-date-editor .el-range-separator {
 		width: 50px !important;
 		font-size: 100px !important;
 	}
-	
+
 	.el-range-input {
 		margin-left: 100px !important;
 	}

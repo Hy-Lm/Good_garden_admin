@@ -89,16 +89,36 @@ const frameIn = [
 	    },
 	    component: _import('commodity/operation')
 	  },
-	  // 预约管理
+	  // 店面预约
 	  {
 		  path: '/make/makes',
 		  name: 'makes',
 		  meta: {
-		    title: '预约管理',
+		    title: '店面预约',
 		    auth: true
 		  },
 		  component: _import('make/makes')
 	  },
+	  // 配送管理
+	  {
+	  		  path: '/make/processings',
+	  		  name: 'processings',
+	  		  meta: {
+	  		    title: '配送管理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('make/processings')
+	  },
+	  {
+	  		  path: '/make/work',
+	  		  name: 'work',
+	  		  meta: {
+	  		    title: '外勤管理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('make/work')
+	  },
+	  
 	  // 用户管理
 	  {
 	  		  path: '/management/managements',
@@ -109,16 +129,7 @@ const frameIn = [
 	  		  },
 	  		  component: _import('management/managements')
 	  },
-	  // 订单处理
-	  {
-	  		  path: '/processing/processings',
-	  		  name: 'processings',
-	  		  meta: {
-	  		    title: '订单处理',
-	  		    auth: true
-	  		  },
-	  		  component: _import('processing/processings')
-	  },
+	 
 	  // 退款管理
 	  {
 	  		  path: '/refund/refunds',
@@ -134,7 +145,7 @@ const frameIn = [
 	  		  path: '/picture/pictures',
 	  		  name: 'picture',
 	  		  meta: {
-	  		    title: '图片管理',
+	  		    title: '活动管理',
 	  		    auth: true
 	  		  },
 	  		  component: _import('picture/pictures')

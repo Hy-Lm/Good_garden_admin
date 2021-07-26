@@ -86,9 +86,6 @@
 						</span>
 					</div>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
 			</div>
 			<div class="BoxItemList">
 				<label style="width: 100px;">商品展示图</label>
@@ -112,9 +109,6 @@
 						</span>
 					</div>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
 			</div>
 			<div class="BoxItemList">
 				<label style="width: 100px;">商品详情图</label>
