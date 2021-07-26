@@ -2,62 +2,94 @@
 	<div class="pro-box">
 		<div class="pro-box-h">
 			<div class="pro-box-h-l">
-				<span>编号查询</span>
-				<el-input class="input" placeholder="全部" v-model="inquire">
-					<i slot="suffix" class="el-input__icon el-icon-search" @click="inquire"></i>
-				</el-input>
-			</div>
-			<div class="pro-box-h-c">
-				<span>搜索</span>
-				<el-input class="input" placeholder="全部" v-model="search">
-					<i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
-				</el-input>
-			</div>
-			<div class="pro-box-h-r">
-				<div class="block">
-					<span class="demonstration">下单时间</span>
-					<el-date-picker v-model="timeinquire" type="daterange" align="right" unlink-panels
-						range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-						:picker-options="pickerOptions2"  style="height: 25px; padding: 0 10px;vertical-align: middle;">
-					</el-date-picker>
-					<button>查询</button>
+				<div class="demo-input-suffix" style="color: #000;font-size: 18px;">编号查询
+				<el-input placeholder="全部" v-model="input_phone" style="width: 180px;">
+				    <i slot="suffix" class="el-input__icon el-icon-search"  @click="inquire_phone"></i>
+				  </el-input>
 				</div>
+			</div>
+			<div class="pro-box-h-l" style="margin-left: 120px;">
+				<div class="demo-input-suffix" style="color: #000;font-size: 18px;">搜索
+				<el-input placeholder="全部" v-model="input_phone" style="width: 180px;">
+				    <i slot="suffix" class="el-input__icon el-icon-search"  @click="inquire_phone"></i>
+				  </el-input>
+				</div>
+			</div>
+			<div class="pro-box-h-r block">
+				<label style="color: #000;font-size: 18px;">下单时间</label>
+				<el-date-picker @change="onChange" v-model="dataValue" type="daterange" range-separator="~"
+					value-format="yyyy 年 MM 月 dd 日" start-placeholder="开始日期" end-placeholder="结束日期">
+				</el-date-picker>
+				<el-button type="primary" icon="el-icon-search" style="margin-left: 20px;">搜索</el-button>
 			</div>
 		</div>
 
 		<!-- 表格 -->
 		<div class="pro-content-table">
-			<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" border style="width: 100%"
-				:header-cell-style="{'background-color': '' }">
-				<el-table-column fixed type="selection" width="55" label="全选">
+			<el-table :data="tableData.slice((currpage-1)*pagesize,currpage*pagesize)" style="width: 100%"
+				class="tablebox">
+				<el-table-column prop="orderNumber" label="订单编号" width="200">
 				</el-table-column>
-				<el-table-column prop="orderNumber" label="订单编号" width="150">
-				</el-table-column>
-				<el-table-column prop="productName" label="产品名称" width="200">
+				<el-table-column prop="productName" label="产品名称" width="150">
 				</el-table-column>
 				<el-table-column prop="money" label="交易金额" width="150">
+				</el-table-column>
+				<el-table-column prop="phone" label="联系方式" width="150">
 				</el-table-column>
 				<el-table-column prop="date" label="交易时间" width="150">
 				</el-table-column>
 				<el-table-column prop="count" label="数量" width="100">
 				</el-table-column>
-				<el-table-column prop="status" label="状态" width="300">
+				<el-table-column prop="status" label="状态" width="100">
 				</el-table-column>
 				<el-table-column fixed="right" label="操作" width="150">
 					<template slot-scope="scope">
-						<el-button type="text" size="small">发货</el-button>
-						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+						<el-button @click="handleClick(scope.row)" type="success" size="small" plain>详情</el-button>
+						<el-button @click="delClick(scope.$index)" type="danger" size="small" plain>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
+			<!-- 分页 -->
+			<div class="pro-content-pages">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
+					:total="tableData.length">
+				</el-pagination>
+			</div>
 		</div>
-		<!-- 分页 -->
-		<div class="pro-content-pages">
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-				:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
-				:total="tableData.length">
-			</el-pagination>
-		</div>
+
+		<!-- 模态框 -->
+		<el-dialog :title="'用户ID：'+details[0].userId" :visible.sync="modal" width="45%">
+			<div style="width: 100%;">
+				<div style="font-weight: 700; font-size: 20px; margin-bottom: 10px;">客户信息:</div>
+				<el-table :data="details" size="mini">
+					<el-table-column property="orderNumber" label="订单编号"></el-table-column>
+					<el-table-column property="productName" label="产品名称"></el-table-column>
+					<el-table-column property="money" label="交易金额"></el-table-column>
+					<el-table-column property="phone" label="联系方式"></el-table-column>
+					<el-table-column property="date" label="交易时间"></el-table-column>
+					<el-table-column property="count" label="数量"></el-table-column>
+				</el-table>
+				<div style="font-weight: 700; font-size: 20px; margin: 10px 0;">消费记录:</div>
+				<el-table :data="details" size="mini">
+					<el-table-column property="orderNumber" label="订单编号" width="95"></el-table-column>
+					<el-table-column property="productName" label="订单名称"></el-table-column>
+					<el-table-column property="count" label="数量"></el-table-column>
+					<el-table-column property="integral" label="积分"></el-table-column>
+					<el-table-column property="money" label="交易金额"></el-table-column>
+					<el-table-column property="date" label="消费时间" width="150"></el-table-column>
+				</el-table>
+			</div>
+			<div class="diaBox" style="width: 100%; display: flex; justify-content:flex-end; margin-top: 15px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+					:current-page.sync="currpage" :page-size="pagesize" layout="total, prev, pager, next, jumper"
+					:total="tableData.length">
+				</el-pagination>
+			</div>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="modal = false">确 定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -65,84 +97,60 @@
 	export default {
 		data() {
 			return {
-				restaurants: [],
-				state: '',
-				inquire: '',  //编号查询
-				search: '',// 搜索
-				timeinquire:'', // 时间查询
-				pickerOptions: {
-					disabledDate(time) {
-						return time.getTime() > Date.now();
-					},
-					shortcuts: [{
-						text: '今天',
-						onClick(picker) {
-							picker.$emit('pick', new Date());
-						}
-					}, {
-						text: '昨天',
-						onClick(picker) {
-							const date = new Date();
-							date.setTime(date.getTime() - 3600 * 1000 * 24);
-							picker.$emit('pick', date);
-						}
-					}, {
-						text: '一周前',
-						onClick(picker) {
-							const date = new Date();
-							date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-							picker.$emit('pick', date);
-						}
-					}]
-				},
-				value1: '', // 选择日期
-				options: [],
-				value: '', // 分类查询
+				input_phone: '', // 手机号查询
 				tableData: [{
+					userId:'111',
 					orderNumber: '0001',
 					productName: '通用玻璃',
-					money:'1488.00',
+					money: '1488.00',
 					date: '2016-05-02',
-					count:'2',
-					status:'已发货'
+					phone:'13587526995',
+					count: '2',
+					status: '已发货',
+					integral:'85'
 				}, {
+					userId:'222',
 					orderNumber: '0002',
 					productName: '通用玻璃',
-					money:'1488.00',
+					money: '1488.00',
 					date: '2016-05-02',
-					count:'4',
-					status:'已发货'
+					phone:'13587526995',
+					count: '2',
+					status: '已发货',
+					integral:'85'
 				}, {
+					userId:'333',
 					orderNumber: '0003',
 					productName: '通用玻璃',
-					money:'1488.00',
+					money: '1488.00',
 					date: '2016-05-02',
-					count:'6',
-					status:'已发货'
+					phone:'13587526995',
+					count: '2',
+					status: '已发货',
+					integral:'85'
 				}],
-				multipleSelection: [],
-				currentPage1: 1,
-				pagesize: 1, // 每页的数据条数
+				pagesize: 10, // 每页的数据条数
 				currpage: 1, // 默认开始页面
+				visible: false,
+				modal: false, //模态框的状态
+				details: [{}], //详情时看到的数据
 			};
 		},
 		methods: {
-			// 编号查询
-			inquire(ev) {
+			// 手机号查询
+			inquire_phone(ev) {
 				console.log(ev);
 			},
-			// 搜索
-			search(ev) {
-				console.log(ev);
-			},
-			// 时间查询
-			timeinquire(ev) {
-				console.log(ev);
-			},
+
 			// 详情
 			handleClick(row) {
 				console.log(row);
-				this.$router.push()
+				this.modal = true
+				this.details[0] = row
+			},
+			// 删除
+			delClick(index) {
+				console.log(index)
 			},
 			// 分页--每页条数
 			handleSizeChange(val) {
@@ -161,99 +169,57 @@
 	}
 </script>
 
-<style scoped="scoped">
-	.pro-box-h-l .el-input__inner ,
-	.pro-box-h-c .el-input__inner {
-		width: 160px;
-		height: 25px !important;
-		line-height: 25px !important;
+<style>
+	/* 表格 */
+	.pro-content-table .el-table__body-wrapper .el-table_1_column_5 {
+		color: #EA4A3C;
 	}
 
-	.pro-box-h .el-input__icon {
-		width: 17px !important;
-		height: 17px !important;
-		line-height: 25px !important;
-	}
-	/* 表格 */
-	.pro-content-table .el-table__body-wrapper .el-table_1_column_6  {
-			color: #EA4A3C;
+	.tablebox th,
+	.tablebox tr,
+	.tablebox td {
+		padding: 0 !important;
+		height: 48px;
+		line-height: 48px !important;
 	}
 </style>
 <style scoped lang="scss">
 	.pro-box {
-		height: 100vh;
-		background-color: #DEE5E7;
-	}
-
-	.pro-box-h {
-		padding: 40px 50px 40px 25px;
-		.pro-box-h-l {
-			float: left;
-			height: 25px;
-			margin-left: 25px;
-		}
-		.pro-box-h-c {
-			float: left;
-			height: 25px;
-			margin-left: 140px;
-		}
-		.pro-box-h-r {
-			float: right;
-			height: 25px;
-			.block {
-				.el-range-editor.el-input__inner {
-					justify-content: space-between;
-				}
-				.demonstration {
-					width: 72px;
-					height: 25px;
-					opacity: 1;
-					font-size: 18px;
-					color: #363636;
-					margin-right: 17px;
-					vertical-align: middle;
-				}
-			}
-			button {
-				width: 48px;
-				height: 25px;
-				background: #ffffff;
-				border-radius: 3px;
-				border: none;
-				margin-left: 25px;
-				vertical-align: middle;
-			}
-		}
-		span {
-			display: inline-block;
-			float: left;
-			width: auto;
-			height: 25px;
-			line-height: 25px;
-			opacity: 1;
-			font-size: 18px;
-			color: #363636;
-			margin-right: 17px;
-			vertical-align: middle;
-		}
-	}
-	// 表格
-	.pro-content-table{
+		height: 100%;
+		background-color: #fff;
 		padding-left: 25px;
 		padding-right: 50px;
 	}
+
+	.pro-box-h {
+		padding: 10px 0;
+		overflow: hidden;
+		.pro-box-h-l {
+			float: left;
+			height: 50px;
+			line-height: 50px;
+			margin-left: 25px;
+		}
+		.pro-box-h-r{
+			float: right;
+			height: 50px;
+			line-height: 50px;
+		}
+	}
+
 	// 分页
 	.pro-content-pages {
 		text-align: right;
-		padding: 30px 0;
+		padding: 20px 0;
 
 	}
+
 	.el-table--border,
 	.el-table--group {
 		border: none;
 	}
+
 	.el-pagination button {
 		background-color: #DEE5E7;
 	}
 </style>
-

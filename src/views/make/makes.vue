@@ -234,12 +234,6 @@
 	};
 </script>
 
-<style>
-	.el-date-editor .el-range-separator,
-	.el-date-editor .el-range__icon {
-		line-height: 25px !important;
-	}
-</style>
 <style scoped lang="scss">
 	.diaBox {
 		font-size: 12px;
