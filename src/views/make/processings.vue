@@ -19,13 +19,7 @@
 					<el-button type="primary" icon="el-icon-search">搜索</el-button>
 				</div>
 			</div>
-			<div class="pro-box-h-r block">
-				<label style="color: #000;font-size: 18px;">下单时间</label>
-				<el-date-picker @change="onChange" v-model="dataValue" type="daterange" range-separator="~"
-					value-format="yyyy 年 MM 月 dd 日" start-placeholder="开始日期" end-placeholder="结束日期">
-				</el-date-picker>
-				<el-button type="primary" icon="el-icon-search" style="margin-left: 20px;">搜索</el-button>
-			</div>
+			<!--  -->
 		</div>
 		<div id="tableBox">
 			<el-table :data="tableData" style="width: 100%" size="medium">
