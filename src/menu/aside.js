@@ -77,6 +77,15 @@ export default [
 	      
 	    ]
 	},
+	// /店铺管理
+	{
+	    title: '店铺管理',
+	    icon: 'folder-o',
+	    children: [
+	        { path: '/shops/shops', title: '店铺管理' },
+	      
+	    ]
+	},
     // {
     //     title: '工序管理',
     //     icon: 'folder-o',

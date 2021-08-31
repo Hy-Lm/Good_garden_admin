@@ -29,13 +29,13 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
+import axios from 'axios'
 // 核心插件
 Vue.use(d2Admin)
 Vue.use(VueQuillEditor)
 Vue.use(vueBeauty)
 Vue.use(Antd);
-
+Vue.prototype.$axios = axios
 
 // 注册全局组件
 // 引入全局组件

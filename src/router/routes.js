@@ -22,45 +22,45 @@ const frameIn = [
         component: _import('system/index')
       },
       //******************************用户管理start
-      {
-        path: '/users/user-manage',
-        name: 'user_manage',
-        meta: {
-          title: '用户管理',
-          auth: true
-        },
-        component: _import('users/user-manage')
-      },
-      // 角色管理
-      {
-        path: '/users/role-manage',
-        name: 'role_manage',
-        meta: {
-          title: '角色管理',
-          auth: true
-        },
-        component: _import('users/role-manage')
-      },
-      // 单位管理
-      {
-        path: '/users/unit-manage',
-        name: 'unit_manage',
-        meta: {
-          title: '单位管理',
-          auth: true
-        },
-        component: _import('users/unit-manage')
-      },
-      // 菜单管理
-      {
-        path: '/users/menue-manage',
-        name: 'menue_manage',
-        meta: {
-          title: '菜单管理',
-          auth: true
-        },
-        component: _import('users/menue-manage')
-      },
+      // {
+      //   path: '/users/user-manage',
+      //   name: 'user_manage',
+      //   meta: {
+      //     title: '用户管理',
+      //     auth: true
+      //   },
+      //   component: _import('users/user-manage')
+      // },
+      // // 角色管理
+      // {
+      //   path: '/users/role-manage',
+      //   name: 'role_manage',
+      //   meta: {
+      //     title: '角色管理',
+      //     auth: true
+      //   },
+      //   component: _import('users/role-manage')
+      // },
+      // // 单位管理
+      // {
+      //   path: '/users/unit-manage',
+      //   name: 'unit_manage',
+      //   meta: {
+      //     title: '单位管理',
+      //     auth: true
+      //   },
+      //   component: _import('users/unit-manage')
+      // },
+      // // 菜单管理
+      // {
+      //   path: '/users/menue-manage',
+      //   name: 'menue_manage',
+      //   meta: {
+      //     title: '菜单管理',
+      //     auth: true
+      //   },
+      //   component: _import('users/menue-manage')
+      // },
 	  // 商品管理
 	  {
 	    path: '/commodity/goodsShelves',
@@ -159,6 +159,22 @@ const frameIn = [
 	  		    auth: true
 	  		  },
 	  		  component: _import('controller/controllers')
+	  },
+	  // 店铺管理
+	  {
+	  		  path: '/shops/shops',
+	  		  name: 'shops',
+	  		  meta: {
+	  		    title: '店铺管理',
+	  		    auth: true
+	  		  },
+	  		  component: _import('shops/shops')
+	  },
+	  // 添加店铺
+	  {
+	  		  path: '/shops/addShop',
+	  		  name: 'addShop',
+	  		  component: _import('shops/addShop')
 	  },
       // ******************************系统设置end
       // 页面重定向 必须保留
