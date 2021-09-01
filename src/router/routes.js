@@ -176,6 +176,12 @@ const frameIn = [
 	  		  name: 'addShop',
 	  		  component: _import('shops/addShop')
 	  },
+	  // 修改店铺
+	  {
+	  		  path: '/shops/updateShop',
+	  		  name: 'updateShop',
+	  		  component: _import('shops/updateShop')
+	  },
       // ******************************系统设置end
       // 页面重定向 必须保留
       {

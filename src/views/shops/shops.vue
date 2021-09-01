@@ -3,11 +3,12 @@
 	<div id="makeBoxs">
 		<div class="makeTop">
 			<div style="display: flex;">
-				<div class="makeTopBox">
-					<label>店铺</label>
-					<el-select v-model="selectItem" placeholder="请选择店铺" @change="handleSelectChange">
-						<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
-					</el-select>
+				<div class="makeTopBox block">
+					<label>店铺名称</label>
+					<el-input v-model.trim="input"  @input='inputFocus' @blur="inputBlur" placeholder="请输入您要搜索的店铺名称" style="width: 200px;"></el-input>
+				</div>
+				<div class="btn">
+					<el-button type="primary" @click="handleSelectChange" icon="el-icon-search">搜索</el-button>
 				</div>
 				<div>
 					<el-button type="primary" @click="addShop">添加店面</el-button>
@@ -31,7 +32,7 @@
 					<template slot-scope="scope">
 						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="success" plain>编辑
 						</el-button>
-						<el-button size="mini" @click="delShop(scope.row)" type="danger">撤销
+						<el-button size="mini" @click="delShop(scope.row)" type="danger" plain>删除
 						</el-button>
 					</template>
 				</el-table-column>
@@ -55,19 +56,18 @@
 		data() {
 			return {
 				url: 'http://192.168.7.152:8083/shopservice/carshop/',
+				input:'',
 				currentPage4: 1,
 				total: 0,
-				pagesize:10,
-				select: [{
-						dian: "店面1",
-						code: "001"
-					},
+				pagesize: 10,
+				select: [
 					{
-						dian: "店面2",
-						code: "002"
+						id:0,
+						dian:'全部'
 					}
 				],
 				selectItem: '', //选中的店面
+				tableDatas:[],//缓存的数据
 				tableData: [{
 						id: 1,
 						name: '1',
@@ -89,15 +89,20 @@
 			};
 		},
 		mounted() {
-			this.info()
+			this.info(this.currentPage4,this.pagesize)
 		},
 		methods: {
 			// 初始页面
-			info() {
-				this.$axios.get(this.url + 'findShop').then(res => {
-					console.log(res)
-					this.tableData = res.data
-					this.total = res.data.length
+			
+			info(current,size) {
+				let data1 = new FormData();
+				data1.append('current', current);
+				data1.append('size', size);
+				this.$axios.post(this.url + 'page',data1).then(res => {
+					// console.log(res.data.ipage)
+					this.tableData = res.data.ipage.records
+					this.total = res.data.ipage.total
+					// this.tableData=this.tableDatas
 				})
 			},
 			// 添加店面
@@ -118,33 +123,68 @@
 						// console.log('res=>', res);
 						if (res.data = "图片不存在") {
 							alert("删除成功")
-							this.info()
+							this.info(this.currentPage4,this.pagesize)
 						}
 					})
 			},
-			handleSelectChange(e) {
-				console.log("当前选中分类是" + e)
+			// 搜索店铺
+			handleSelectChange() {
+				// console.log( e)
+				let data2 = new FormData();
+				data2.append('name',this.input);
+					this.$axios.post(this.url + 'like',data2).then(res => {
+						// console.log(res.data)
+						this.tableData=res.data
+					})
+			},
+			// inputBlur
+			// 失去焦点
+			inputBlur(){
+				// console.log(this.input)
+				if(this.input==''){
+					this.info(this.currentPage4,this.pagesize)
+				}else{
+					this.handleSelectChange()
+				}
+				
+			},
+			// 获取焦点
+			inputFocus(){
+				// console.log(this.input)
+				if(this.input==''){
+					this.info(this.currentPage4,this.pagesize)
+				}else{
+					this.handleSelectChange()
+				}
 			},
 			onChange(e) {
 				console.log("选中的开始时间是:" + e[0])
 				console.log("选中的结束时间是:" + e[1])
 			},
+			// 修改店铺
 			handleEdit(index, row) {
-				console.log(index, row);
-
+				// console.log(index, row);
+				this.$router.push({
+					name: 'updateShop',
+					query: {
+						row: row
+					}
+				})
 			},
 			handleDelete(index, row) {
 				console.log(index, row);
+
 			},
 			// 分页--每页条数
 			handleSizeChange(val) {
-			  console.log(`每页 ${val} 条`);
-			  this.pagesize = val
+				// console.log(`每页 ${val} 条`);
+				this.pagesize = val
 			},
 			// 当前页
 			handleCurrentChange(val) {
-			  console.log(`当前页: ${val}`);
-			  this.currpage = val
+				// console.log(`当前页: ${val}`);
+				this.currpage = val
+				this.info(val,this.pagesize)
 			}
 		}
 	};
@@ -186,10 +226,11 @@
 		margin-right: 10px;
 	}
 
-	.makeTopBox {
+	.makeTopBox,
+	.btn{
 		margin-right: 30px;
 	}
-
+	
 	.el-date-editor .el-range-separator {
 		width: 50px !important;
 		font-size: 100px !important;

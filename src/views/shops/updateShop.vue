@@ -27,13 +27,15 @@
 				</div>
 				<div class="BoxItemList">
 					<label style="">营业时间</label>
-					<el-time-select placeholder="起始时间" v-model="startTime" :picker-options="{
+					<el-input v-model="startTime" disabled v-if="!boxShow" style="width: 240px;"></el-input>
+					<el-input v-model="endTime" disabled v-if="!boxShow" style="width: 240px;"></el-input>
+					<el-time-select v-if="boxShow" placeholder="起始时间" v-model="startTime" :picker-options="{
 					      start: '08:00',
 					      step: '00:30',
 					      end: '24:00'
 					    }">
 					</el-time-select>
-					<el-time-select placeholder="结束时间" v-model="endTime" :picker-options="{
+					<el-time-select v-if="boxShow" placeholder="结束时间" v-model="endTime" :picker-options="{
 					      start: '08:00',
 					      step: '00:30',
 					      end: '24:00',
@@ -46,10 +48,9 @@
 					<label style="width: 100px;">店铺展示</label>
 				</div>
 				<div class="boxImg boxImgA">
-					<!-- :class="{hide:certHideUpload}" -->
-					<el-upload action="none" list-type="picture-card"
-					:class="{disabled:uploadDisabled}"
-						:auto-upload="false" :limit="number" :file-list="row.advertisement" 
+					<img class="imgurl" :src="imgurl" v-if="imgurlchange">
+					<el-upload action="none" :class="{disabled:uploadDisabled}" list-type="picture-card"
+						:auto-upload="false" :limit="number" :file-list="row.advertisement"
 						:on-success="uploadFileSuccess" :on-exceed="exceedFile" :on-change="changeKey">
 						<i slot="default" class="el-icon-plus"></i>
 						<div slot="file" slot-scope="{file}">
@@ -73,8 +74,9 @@
 					<img width="100%" :src="dialogImageUrl" alt="">
 				</el-dialog>
 				<div class="titleBox">
-					{{titleBoxitem}}
-					<el-button type="primary" style="margin-left: 20px;" @click="addshop" v-if="boxShow">提交</el-button>
+					<el-button type="primary" style="margin-left: 20px;" @click="up" v-if="!boxShow">修改</el-button>
+					<el-button type="success" style="margin-left: 20px;" @click="updateshop" v-if="boxShow">提交
+					</el-button>
 				</div>
 			</div>
 		</div>
@@ -88,6 +90,8 @@
 		data() {
 			return {
 				url: 'http://192.168.7.152:8083/shopservice/carshop/',
+				imgurl: '',
+				imgurlchange: true,
 				boxShow: true,
 				startTime: '',
 				endTime: '',
@@ -96,10 +100,8 @@
 					address: '',
 					tel: '',
 					score: '',
-					advertisement:[]
+					advertisement: []
 				},
-				// certHideUpload: false,
-				//   certLimitCount: 1,
 				titleBoxitem: "",
 				number: 1,
 				numberZhan: 1,
@@ -120,40 +122,81 @@
 				uploadDisabled: false
 			};
 		},
+		mounted() {
+			console.log(this.$route.query.row.id)
+			this.boxShow = false
+			this.uploadDisabled = true
+			// this.row = this.$route.query.row
+			var startTime = this.getCaption(this.$route.query.row.time, 0)
+			var endTime = this.getCaption(this.$route.query.row.time, 1)
+			this.startTime = startTime
+			this.endTime = endTime
+			// this.imgurl = this.row.img
+			// this.row.advertisement.push(this.row.img)
+			// this.uploadDisabled = true;
+			this.info(this.$route.query.row.id)
+		},
 		methods: {
-			// 添加商品
-			addshop() {
+			// 渲染页面
+			info(id) {
+				;
+				let data2 = new FormData();
+				data2.append('id', id);
+				this.$axios.post(this.url + 'selectById', data2).then(res => {
+					console.log(res.data)
+					this.row = res.data[0]
+					this.imgurl = this.row.img
+					// this.tableData=res.data
+				})
+			},
+			// 可以修改内容了
+			up() {
+				this.boxShow = true
+				// this.imgurlchange=false
+				this.uploadDisabled = false
+			},
+			// 截取前后两部分
+			getCaption(obj, state) {
+				var index = obj.lastIndexOf("\-");
+				if (state == 0) {
+					obj = obj.substring(0, index);
+				} else {
+					obj = obj.substring(index + 1, obj.length);
+				}
+				return obj;
+			},
+			// 修改 添加商品
+			updateshop() {
 				var {
 					row,
 					startTime,
 					endTime
 				} = this
-				row['time']=startTime+'-'+endTime
-				let data = new FormData();
-				// data.append('imgs', row.img);
-				for (var k in row) {
-					data.append(k, row[k]);
+				row['time'] = startTime + '-' + endTime;
+				var carshop={}
+				for (var  i in row) {
+					carshop[i]=row[i]
 				}
-				this.$axios.post(this.url + 'addShop', data, {
+				// console.log(carshop)
+				this.$axios.post(this.url + 'update',JSON.stringify(carshop), {
 						headers: {
-							'Content-Type': 'multipart/form-data'
+							'Content-Type': ' application/json',
+							// multipart/form-data
 						}
 					})
 					.then(res => {
 						console.log('res=>', res);
 						if(res.data){
-							alert('添加成功')
-							this.$router.push({
-								name: 'shops'
-							})
+							this.boxShow=false
+							this.uploadDisabled = true
 						}
 					})
 			},
 			changeKey(file, fileList) {
+				this.imgurlchange = false
 				if (fileList.length >= 1) {
 					this.uploadDisabled = true;
 				}
-				 // this.certHideUpload = fileList.length >= this.certLimitCount
 				let data = new FormData();
 				data.append('uploadFile', fileList[0].raw);
 				this.$axios.post(this.url + 'upload', data, {
@@ -163,7 +206,7 @@
 					})
 					.then(res => {
 						console.log('res=>', res);
-						this.row["img"]=res.data
+						this.row["img"] = res.data
 					})
 			},
 			uploadFileSuccess(response, file, fileList) {
@@ -176,10 +219,8 @@
 			},
 			handleRemove(file) {
 				console.log(file);
-				this.row.advertisement=[]
 				this.uploadDisabled = false
-				// console.log(this.row.advertisement+'111')
-				
+				this.row.advertisement = []
 			},
 			handlePictureCardPreview(file) {
 				this.dialogImageUrl = file.url;
@@ -193,9 +234,16 @@
 </script>
 
 <style>
+	.imgurl {
+		width: 148px;
+		height: 100px;
+		border-radius: 5px;
+	}
+
 	.disabled .el-upload--picture-card {
 		display: none !important;
 	}
+
 	.boxImg::-webkit-scrollbar {
 		width: 2px;
 		background: #eee;
@@ -227,6 +275,10 @@
 	.boxImgB .el-upload-list--picture-card .el-upload-list__item {
 		height: 180px !important;
 		line-height: 180px !important;
+	}
+
+	.boxImgA {
+		display: flex;
 	}
 
 	.boxImgA .el-upload--picture-card,
