@@ -5,7 +5,8 @@
 			<div style="display: flex;">
 				<div class="makeTopBox block">
 					<label>店铺名称</label>
-					<el-input v-model.trim="input"  @input='inputFocus' @blur="inputBlur" placeholder="请输入您要搜索的店铺名称" style="width: 200px;"></el-input>
+					<el-input v-model.trim="input" @input='inputFocus' @blur="inputBlur" placeholder="请输入您要搜索的店铺名称"
+						style="width: 200px;"></el-input>
 				</div>
 				<div class="btn">
 					<el-button type="primary" @click="handleSelectChange" icon="el-icon-search">搜索</el-button>
@@ -19,6 +20,8 @@
 		<div id="tableBox">
 			<el-table :data="tableData" style="width: 100%" size="medium">
 				<el-table-column prop="name" label="店面">
+				</el-table-column>
+				<el-table-column prop="shopid" label="店面编号">
 				</el-table-column>
 				<el-table-column prop="time" label="营业时间">
 				</el-table-column>
@@ -52,53 +55,59 @@
 </template>
 
 <script>
+	import {
+		Message,
+		MessageBox
+	} from 'element-ui'
 	export default {
 		data() {
 			return {
 				url: 'http://192.168.7.152:8083/shopservice/carshop/',
-				input:'',
+				input: '',
 				currentPage4: 1,
 				total: 0,
 				pagesize: 10,
-				select: [
-					{
-						id:0,
-						dian:'全部'
-					}
-				],
+				select: [{
+					id: 0,
+					dian: '全部'
+				}],
 				selectItem: '', //选中的店面
-				tableDatas:[],//缓存的数据
+				tableDatas: [], //缓存的数据
 				tableData: [{
 						id: 1,
+						shopid:'121',
 						name: '1',
 						time: '2121-121',
 						address: '想你这件事一直在我脑海中',
 						tel: '15735629946',
-						score: '4.5'
+						score: '4.5',
+						space:'5,6'
 					},
 					{
 						id: 2,
+						shopid:'121',
 						name: '1',
 						time: '2121-121',
 						address: '想你这件事一直在我脑海中',
 						tel: '15735629946',
-						score: '4.5'
+						score: '4.5',
+						space:'4,2'
 					}
 				]
 
 			};
 		},
 		mounted() {
-			this.info(this.currentPage4,this.pagesize)
+			// 初始页面
+			this.info(this.currentPage4, this.pagesize)
 		},
 		methods: {
-			// 初始页面
-			
-			info(current,size) {
+
+			info(current, size) {
 				let data1 = new FormData();
 				data1.append('current', current);
 				data1.append('size', size);
-				this.$axios.post(this.url + 'page',data1).then(res => {
+				this.$axios.post(this.url + 'page', data1).then(res => {
 					// console.log(res.data.ipage)
 					this.tableData = res.data.ipage.records
 					this.total = res.data.ipage.total
@@ -115,45 +124,64 @@
 			delShop(row) {
 				var strindex = row.img.lastIndexOf('/')
 				var strimg = row.img.substr(strindex + 1)
+				// console.log(strimg)
 				let data = new FormData();
 				data.append('id', row.id);
 				data.append('imgPath', strimg);
-				this.$axios.post(this.url + 'deleteByid', data)
-					.then(res => {
-						// console.log('res=>', res);
-						if (res.data = "图片不存在") {
-							alert("删除成功")
-							this.info(this.currentPage4,this.pagesize)
-						}
+				MessageBox.confirm('是否删除此数据。', '确认操作', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'success'
 					})
+					.then(() => {
+						Message({
+							message: '删除成功',
+							type:"success"
+						})
+						this.$axios.post(this.url + 'deleteByid', data)
+							.then(res => {
+								// console.log('res=>', res);
+
+								if (res.data) {
+									this.info(this.currentPage4, this.pagesize)
+								}
+							})
+					})
+					.catch(() => {
+
+						Message({
+							message: '已取消'
+						})
+					})
+
 			},
 			// 搜索店铺
 			handleSelectChange() {
 				// console.log( e)
 				let data2 = new FormData();
-				data2.append('name',this.input);
-					this.$axios.post(this.url + 'like',data2).then(res => {
-						// console.log(res.data)
-						this.tableData=res.data
-					})
+				data2.append('name', this.input);
+				this.$axios.post(this.url + 'like', data2).then(res => {
+					// console.log(res.data)
+					this.tableData = res.data
+				})
 			},
 			// inputBlur
 			// 失去焦点
-			inputBlur(){
+			inputBlur() {
 				// console.log(this.input)
-				if(this.input==''){
-					this.info(this.currentPage4,this.pagesize)
-				}else{
+				if (this.input == '') {
+					this.info(this.currentPage4, this.pagesize)
+				} else {
 					this.handleSelectChange()
 				}
-				
+
 			},
 			// 获取焦点
-			inputFocus(){
+			inputFocus() {
 				// console.log(this.input)
-				if(this.input==''){
-					this.info(this.currentPage4,this.pagesize)
-				}else{
+				if (this.input == '') {
+					this.info(this.currentPage4, this.pagesize)
+				} else {
 					this.handleSelectChange()
 				}
 			},
@@ -184,13 +212,14 @@
 			handleCurrentChange(val) {
 				// console.log(`当前页: ${val}`);
 				this.currpage = val
-				this.info(val,this.pagesize)
+				this.info(val, this.pagesize)
 			}
 		}
 	};
 </script>
 
 <style scoped lang="scss">
+
 	.diaBox {
 		font-size: 12px;
 		width: 100%;
@@ -227,10 +256,10 @@
 	}
 
 	.makeTopBox,
-	.btn{
+	.btn {
 		margin-right: 30px;
 	}
-	
+
 	.el-date-editor .el-range-separator {
 		width: 50px !important;
 		font-size: 100px !important;

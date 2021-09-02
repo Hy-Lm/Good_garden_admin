@@ -51,7 +51,21 @@ Vue.prototype.$echarts = echarts  //挂载在全局
 
 Vue.component("mypopconfirm",mypopconfirm)
 Vue.component("lineTree",lineTree)
-
+// 全局拦截
+router.beforeEach((to, from, next)=> {
+	// console.log( store.state.shopid+'111111111')
+  let userId =store.state.shopid;
+  // 我知道我现在的i美苏我什 
+  //不如一笑而过，如果一个人都哭了，我宁愿换来三个人的好过
+  //这里是对登录后的值进行判断，也可对token的值进行判断
+    if (userId === '') {
+      // if (to.meta.requireAuth || to.name == null) {
+        next({path: 'login'})
+    } else{
+		 next();
+	}
+  }
+);
 new Vue({
   router,
   store,

@@ -62,7 +62,11 @@
 
 <script>
 import dayjs from 'dayjs'
-import { mapActions } from 'vuex'
+import {
+		mapActions,
+		mapState,
+		mapGetters
+	} from 'vuex' //注册 action 、 state 、getter
 export default {
   data () {
     return {
@@ -70,7 +74,7 @@ export default {
       time: dayjs().format('HH:mm:ss'),
       // 快速选择用户
       dialogVisible: false,
-
+	  url: 'http://192.168.7.152:8083/shopservice/carshop/',
       // 表单
       formLogin: {
         username: '',
@@ -88,7 +92,14 @@ export default {
       }
     }
   },
+  computed: {
+  	...mapState(['count']),
+  	...mapActions({
+  		handlerAddasy: 'changeShopID'
+  	})
+  },
   mounted () {
+	  // console.log(this.$store.state.shopid)
     this.timeInterval = setInterval(() => {
       this.refreshTime()
     }, 1000)
@@ -122,14 +133,34 @@ export default {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
-          this.login({
-              loginNo: this.formLogin.username,
-              loginPwd: '9cbf8a4dcb8e30682b927f352d6559a0'
-          })
-          .then(res => {
-               // 重定向对象不存在则返回顶层路径
-               this.$router.replace("index")
-          })
+          // this.login({
+          //     loginNo: this.formLogin.username,
+          //     loginPwd: '9cbf8a4dcb8e30682b927f352d6559a0'
+          // })
+          // .then(res => {
+          //      // 重定向对象不存在则返回顶层路径
+          //      this.$router.replace("index")
+          // })
+		  // console.log(this.formLogin)
+		  let data = new FormData();
+		  data.append('shopid', this.formLogin.username);
+		  data.append('password', this.formLogin.password);
+		  this.$axios.post(this.url + 'login',data, {
+		  		headers: {
+		  			'Content-Type': ' multipart/form-data',
+		  			// multipart/form-data
+		  		}
+		  	})
+		  	.then(res => {
+		  		// console.log('res=>', res);
+				if(res.data.success){
+					// 成功
+					this.$store.dispatch('changeShopID',this.formLogin.username)
+					 this.$router.replace("index")
+					 sessionStorage.setItem('shopid',this.formLogin.username)
+					// console.log(this.$store.state.shopid)
+				}
+		  	}) 
         } else {
           // 登录表单校验失败
           this.$message.error('表单校验失败')

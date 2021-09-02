@@ -26,6 +26,16 @@
 					<div class="BoxItemListDiv" v-if="!boxShow">{{row.score}}</div>
 				</div>
 				<div class="BoxItemList">
+					<label>店铺经度</label>
+					<el-input v-if="boxShow" v-model="space1" placeholder="请输入经度" style="width: 240px;"></el-input>
+					<div class="BoxItemListDiv" v-if="!boxShow">{{space1}}</div>
+				</div>
+				<div class="BoxItemList">
+					<label>店铺纬度</label>
+					<el-input v-if="boxShow" v-model="space2" placeholder="请输入纬度" style="width: 240px;"></el-input>
+					<div class="BoxItemListDiv" v-if="!boxShow">{{space2}}</div>
+				</div>
+				<div class="BoxItemList">
 					<label style="">营业时间</label>
 					<el-input v-model="startTime" disabled v-if="!boxShow" style="width: 240px;"></el-input>
 					<el-input v-model="endTime" disabled v-if="!boxShow" style="width: 240px;"></el-input>
@@ -50,7 +60,7 @@
 				<div class="boxImg boxImgA">
 					<img class="imgurl" :src="imgurl" v-if="imgurlchange">
 					<el-upload action="none" :class="{disabled:uploadDisabled}" list-type="picture-card"
-						:auto-upload="false" :limit="number" :file-list="row.advertisement"
+						:auto-upload="false" :limit="number" :file-list="advertisement"
 						:on-success="uploadFileSuccess" :on-exceed="exceedFile" :on-change="changeKey">
 						<i slot="default" class="el-icon-plus"></i>
 						<div slot="file" slot-scope="{file}">
@@ -85,6 +95,10 @@
 </template>
 
 <script>
+	import {
+		Message,
+		MessageBox
+	} from 'element-ui'
 	// 
 	export default {
 		data() {
@@ -95,13 +109,15 @@
 				boxShow: true,
 				startTime: '',
 				endTime: '',
+				space1:'',//经度
+				space2:'',//纬度
 				row: {
 					name: '',
 					address: '',
 					tel: '',
 					score: '',
-					advertisement: []
 				},
+				advertisement: [],
 				titleBoxitem: "",
 				number: 1,
 				numberZhan: 1,
@@ -123,7 +139,7 @@
 			};
 		},
 		mounted() {
-			console.log(this.$route.query.row.id)
+			// console.log(this.$route.query.row.id)
 			this.boxShow = false
 			this.uploadDisabled = true
 			// this.row = this.$route.query.row
@@ -139,13 +155,16 @@
 		methods: {
 			// 渲染页面
 			info(id) {
-				;
 				let data2 = new FormData();
 				data2.append('id', id);
 				this.$axios.post(this.url + 'selectById', data2).then(res => {
-					console.log(res.data)
+					// console.log(res.data)
 					this.row = res.data[0]
 					this.imgurl = this.row.img
+					var space1 = this.getCaptionSpace(this.$route.query.row.space, 0)
+					var space2 = this.getCaptionSpace(this.$route.query.row.space, 1)
+					this.space1 = space1
+					this.space2 = space2
 					// this.tableData=res.data
 				})
 			},
@@ -165,32 +184,69 @@
 				}
 				return obj;
 			},
+			getCaptionSpace(obj, state) {
+				var index = obj.lastIndexOf("\,");
+				if (state == 0) {
+					obj = obj.substring(0, index);
+				} else {
+					obj = obj.substring(index + 1, obj.length);
+				}
+				return obj;
+			},
 			// 修改 添加商品
 			updateshop() {
 				var {
 					row,
 					startTime,
-					endTime
+					endTime,
+					space1,
+					space2
 				} = this
 				row['time'] = startTime + '-' + endTime;
+				row['space']=space1+','+space2
 				var carshop={}
 				for (var  i in row) {
+					if(row[i]==""){
+						Message({
+							message: '请输入数据',
+							type:'warning'
+						})
+							return false;
+					}
 					carshop[i]=row[i]
 				}
+				MessageBox.confirm('是否修改此数据。', '确认操作', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'success'
+					})
+					.then(() => {
+						Message({
+							message: '修改成功',
+							type:"success"
+						})
+						this.$axios.post(this.url + 'update',JSON.stringify(carshop), {
+								headers: {
+									'Content-Type': ' application/json',
+									// multipart/form-data
+								}
+							})
+							.then(res => {
+								// console.log('res=>', res);
+								if(res.data){
+									this.boxShow=false
+									this.uploadDisabled = true
+								}
+							})
+					})
+					.catch(() => {
+				
+						Message({
+							message: '已取消修改'
+						})
+					})
 				// console.log(carshop)
-				this.$axios.post(this.url + 'update',JSON.stringify(carshop), {
-						headers: {
-							'Content-Type': ' application/json',
-							// multipart/form-data
-						}
-					})
-					.then(res => {
-						console.log('res=>', res);
-						if(res.data){
-							this.boxShow=false
-							this.uploadDisabled = true
-						}
-					})
+			
 			},
 			changeKey(file, fileList) {
 				this.imgurlchange = false

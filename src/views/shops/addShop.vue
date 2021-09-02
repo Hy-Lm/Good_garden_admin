@@ -26,6 +26,16 @@
 					<div class="BoxItemListDiv" v-if="!boxShow">{{row.score}}</div>
 				</div>
 				<div class="BoxItemList">
+					<label>店铺经度</label>
+					<el-input v-if="boxShow" v-model="space1" placeholder="请输入经度" style="width: 240px;"></el-input>
+					<div class="BoxItemListDiv" v-if="!boxShow">{{space1}}</div>
+				</div>
+				<div class="BoxItemList">
+					<label>店铺纬度</label>
+					<el-input v-if="boxShow" v-model="space2" placeholder="请输入纬度" style="width: 240px;"></el-input>
+					<div class="BoxItemListDiv" v-if="!boxShow">{{space2}}</div>
+				</div>
+				<div class="BoxItemList">
 					<label style="">营业时间</label>
 					<el-time-select placeholder="起始时间" v-model="startTime" :picker-options="{
 					      start: '08:00',
@@ -49,7 +59,7 @@
 					<!-- :class="{hide:certHideUpload}" -->
 					<el-upload action="none" list-type="picture-card"
 					:class="{disabled:uploadDisabled}"
-						:auto-upload="false" :limit="number" :file-list="row.advertisement" 
+						:auto-upload="false" :limit="number" :file-list="advertisement" 
 						:on-success="uploadFileSuccess" :on-exceed="exceedFile" :on-change="changeKey">
 						<i slot="default" class="el-icon-plus"></i>
 						<div slot="file" slot-scope="{file}">
@@ -83,6 +93,10 @@
 </template>
 
 <script>
+	import {
+		Message,
+		MessageBox
+	} from 'element-ui'
 	// 
 	export default {
 		data() {
@@ -91,13 +105,16 @@
 				boxShow: true,
 				startTime: '',
 				endTime: '',
+				space1:'',//经度
+				space2:'',//纬度
 				row: {
 					name: '',
 					address: '',
 					tel: '',
 					score: '',
-					advertisement:[]
+					
 				},
+				advertisement:[],
 				// certHideUpload: false,
 				//   certLimitCount: 1,
 				titleBoxitem: "",
@@ -126,28 +143,56 @@
 				var {
 					row,
 					startTime,
-					endTime
+					endTime,
+					space1,
+					space2
 				} = this
 				row['time']=startTime+'-'+endTime
+				row['space']=space1+','+space2
 				let data = new FormData();
 				// data.append('imgs', row.img);
 				for (var k in row) {
+					// console.log(k,'---'+row[k])
+					if(row[k]==""){
+						Message({
+							message: '请输入数据',
+							type:'warning'
+						})
+							return false;
+					}
 					data.append(k, row[k]);
 				}
-				this.$axios.post(this.url + 'addShop', data, {
-						headers: {
-							'Content-Type': 'multipart/form-data'
-						}
+				MessageBox.confirm('是否添加此数据。', '确认操作', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'success'
 					})
-					.then(res => {
-						console.log('res=>', res);
-						if(res.data){
-							alert('添加成功')
-							this.$router.push({
-								name: 'shops'
+					.then(() => {
+						Message({
+							message: '添加成功',
+							type:"success"
+						})
+						this.$axios.post(this.url + 'addShop', data, {
+								headers: {
+									'Content-Type': 'multipart/form-data'
+								}
 							})
-						}
+							.then(res => {
+								// console.log('res=>', res);
+								if(res.data){
+									this.$router.push({
+										name: 'shops'
+									})
+								}
+							})
 					})
+					.catch(() => {
+				
+						Message({
+							message: '已取消添加'
+						})
+					})
+				
 			},
 			changeKey(file, fileList) {
 				if (fileList.length >= 1) {
@@ -162,7 +207,7 @@
 						}
 					})
 					.then(res => {
-						console.log('res=>', res);
+						// console.log('res=>', res);
 						this.row["img"]=res.data
 					})
 			},
@@ -171,7 +216,7 @@
 
 			},
 			exceedFile(files, fileList) {
-				console.log(files)
+				// console.log(files)
 				this.$message.error('只能上传' + this.number + '个文件');
 			},
 			handleRemove(file) {
