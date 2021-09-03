@@ -2,6 +2,13 @@
 	<div id="makeBoxs">
 		<div class="makeTop">
 			<div style="display: flex;">
+				<!-- <div class="makeTopBox">
+					<label>店铺</label>
+					<el-select v-model="selectItem" placeholder="请选择商品类型" @change="handleSelectChange"
+						style="width: 200px;">
+						<el-option :label="item.dian" :value="item.code" v-for="(item,index) in select"></el-option>
+					</el-select>
+				</div> -->
 				<div class="makeTopBox">
 					<label>商品分类</label>
 					<el-select v-model="selectItem" placeholder="请选择商品类型" @change="handleSelectChange"
